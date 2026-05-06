@@ -7,158 +7,248 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg:      #0f1117;
-    --surface: #1a1d27;
-    --border:  #2a2d3a;
-    --text:    #e8eaf0;
-    --muted:   #8b8fa8;
-    --accent:  #6c63ff;
-    --accent2: #ff6584;
-    --green:   #43d9ad;
-    --yellow:  #ffd166;
-    --r:       14px;
+    --bg:        #f5f6fa;
+    --surface:   #ffffff;
+    --border:    #e8eaf0;
+    --border2:   #d0d4e8;
+    --text:      #1a1d2e;
+    --muted:     #6b7190;
+    --accent:    #5b4fe9;
+    --accent-lt: #ede9ff;
+    --red:       #e94f37;
+    --red-lt:    #ffecea;
+    --green:     #0f9e6e;
+    --green-lt:  #e6f7f2;
+    --yellow:    #f5a623;
+    --yellow-lt: #fff8ec;
+    --shadow:    0 2px 12px rgba(0,0,0,.07);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
+    --r:         16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); direction: rtl; }
+  body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); direction: rtl; font-size: 15px; line-height: 1.5; }
 
-  /* ── Password ── */
+  /* ── Password overlay ── */
   #pw-overlay {
-    position: fixed; inset: 0; z-index: 9999; background: var(--bg);
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #ede9ff 0%, #f5f6fa 60%, #ffecea 100%);
     display: flex; align-items: center; justify-content: center;
   }
   #pw-box {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 20px; padding: 48px 40px; width: 340px; text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    border-radius: 24px; padding: 52px 44px; width: 360px; text-align: center;
+    box-shadow: var(--shadow-lg);
   }
-  #pw-box h2 { font-size: 1.5rem; margin-bottom: 6px; }
-  #pw-box p  { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
+  #pw-box .pw-icon { font-size: 3rem; margin-bottom: 16px; }
+  #pw-box h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  #pw-box p  { color: var(--muted); font-size: .95rem; margin-bottom: 32px; }
   #pw-input {
-    width: 100%; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border);
-    border-radius: 10px; color: var(--text); font-size: 1rem; text-align: center;
-    outline: none; margin-bottom: 12px; direction: ltr;
+    width: 100%; padding: 14px 18px; background: var(--bg); border: 2px solid var(--border);
+    border-radius: 12px; color: var(--text); font-size: 1rem; text-align: center;
+    outline: none; margin-bottom: 12px; direction: ltr; transition: border-color .2s;
   }
   #pw-input:focus { border-color: var(--accent); }
   #pw-btn {
-    width: 100%; padding: 12px; background: var(--accent); border: none;
-    border-radius: 10px; color: #fff; font-size: 1rem; cursor: pointer; transition: opacity .2s;
+    width: 100%; padding: 14px; background: var(--accent); border: none;
+    border-radius: 12px; color: #fff; font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: background .2s, transform .1s;
   }
-  #pw-btn:hover { opacity: .85; }
-  #pw-err { color: var(--accent2); font-size: .85rem; margin-top: 10px; min-height: 20px; }
+  #pw-btn:hover  { background: #4a3fd4; }
+  #pw-btn:active { transform: scale(.98); }
+  #pw-err { color: var(--red); font-size: .85rem; margin-top: 10px; min-height: 20px; }
 
-  /* ── Layout ── */
-  #app { display: none; max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
+  /* ── App shell ── */
+  #app { display: none; }
 
-  header {
+  /* ── Top bar ── */
+  .topbar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 68px;
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 36px; flex-wrap: wrap; gap: 12px;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 0 var(--border);
   }
-  .header-left { display: flex; align-items: center; gap: 14px; }
-  .logo {
-    width: 52px; height: 52px; border-radius: 14px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+  .topbar-logo {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), #a78bfa);
+    display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    flex-shrink: 0;
   }
-  header h1 { font-size: 1.7rem; font-weight: 700; }
-  .subtitle  { color: var(--muted); font-size: .85rem; margin-top: 2px; }
-  #last-updated { color: var(--muted); font-size: .82rem; }
+  .topbar h1 { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+  .topbar .sub { font-size: .8rem; color: var(--muted); margin-top: 1px; }
+  #last-updated {
+    font-size: .8rem; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 14px;
+  }
 
-  /* ── Section ── */
-  .section-hdr {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 1.1rem; font-weight: 600; margin: 40px 0 18px;
-  }
-  .sec-badge {
-    width: 34px; height: 34px; border-radius: 9px;
-    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-  }
-  .sec-yt  { background: rgba(255,101,132,.18); }
-  .sec-aud { background: rgba(108,99,255,.18); }
+  /* ── Main content ── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 36px 24px 80px; }
 
-  /* ── Cards ── */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 16px; margin-bottom: 24px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 22px 20px; }
-  .card .lbl { color: var(--muted); font-size: .78rem; margin-bottom: 8px; }
-  .card .val { font-size: 1.9rem; font-weight: 700; line-height: 1; }
-  .card .sub { color: var(--muted); font-size: .76rem; margin-top: 6px; }
+  /* ── Section headers ── */
+  .sec-hdr {
+    display: flex; align-items: center; gap: 12px;
+    margin: 44px 0 20px; padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .sec-hdr .icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .sec-hdr h2 { font-size: 1.25rem; font-weight: 700; }
+  .sec-hdr .sec-sub { font-size: .85rem; color: var(--muted); margin-top: 1px; }
+
+  /* ── Stat cards ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 28px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 24px 22px;
+    box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s;
+  }
+  .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .card .c-icon { font-size: 1.3rem; margin-bottom: 12px; }
+  .card .c-lbl { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .card .c-val { font-size: 2.2rem; font-weight: 800; color: var(--text); line-height: 1; }
+  .card .c-sub { font-size: .8rem; color: var(--muted); margin-top: 8px; }
+  .card.accent-green { border-top: 3px solid var(--green); }
+  .card.accent-purple { border-top: 3px solid var(--accent); }
+  .card.accent-red    { border-top: 3px solid var(--red); }
+  .card.accent-yellow { border-top: 3px solid var(--yellow); }
 
   /* ── Episode card ── */
   .ep-card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--r); padding: 24px 24px; margin-bottom: 24px;
-    display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;
+    border-radius: var(--r); padding: 28px; margin-bottom: 20px;
+    box-shadow: var(--shadow); display: flex; gap: 24px; flex-wrap: wrap;
+    align-items: flex-start;
   }
   .ep-thumb {
-    width: 180px; height: 101px; border-radius: 10px; object-fit: cover;
-    background: var(--border); flex-shrink: 0;
+    width: 200px; height: 113px; border-radius: 12px; object-fit: cover;
+    background: var(--bg); flex-shrink: 0; display: block;
   }
-  .ep-thumb-placeholder {
-    width: 180px; height: 101px; border-radius: 10px;
-    background: linear-gradient(135deg, #2a2d3a, #1a1d27);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem; flex-shrink: 0;
+  .ep-body { flex: 1; min-width: 220px; }
+  .ep-badge {
+    display: inline-block; font-size: .72rem; font-weight: 700;
+    background: var(--accent-lt); color: var(--accent);
+    border-radius: 6px; padding: 3px 10px; margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: .05em;
   }
-  .ep-info { flex: 1; min-width: 200px; }
-  .ep-info .ep-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
-  .ep-info .ep-title a { color: var(--text); text-decoration: none; }
-  .ep-info .ep-title a:hover { color: var(--accent); }
-  .ep-info .ep-meta { color: var(--muted); font-size: .82rem; margin-bottom: 14px; }
-  .ep-stats { display: flex; gap: 24px; flex-wrap: wrap; }
-  .ep-stat .es-val { font-size: 1.4rem; font-weight: 700; color: var(--green); }
-  .ep-stat .es-lbl { color: var(--muted); font-size: .75rem; }
+  .ep-title {
+    font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; line-height: 1.4;
+  }
+  .ep-title a { color: var(--text); text-decoration: none; transition: color .15s; }
+  .ep-title a:hover { color: var(--accent); }
+  .ep-date { font-size: .82rem; color: var(--muted); margin-bottom: 18px; }
+  .ep-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+  .ep-stat .es-val { font-size: 1.8rem; font-weight: 800; color: var(--text); line-height: 1; }
+  .ep-stat .es-lbl { font-size: .75rem; color: var(--muted); margin-top: 4px; }
+  .ep-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 18px; padding: 8px 18px;
+    background: var(--accent); color: #fff;
+    border-radius: 8px; font-size: .85rem; font-weight: 600;
+    text-decoration: none; transition: background .15s;
+  }
+  .ep-link:hover { background: #4a3fd4; }
 
   /* ── Chart ── */
   .chart-wrap {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--r); padding: 24px 20px; margin-bottom: 24px;
+    border-radius: var(--r); padding: 28px; margin-bottom: 20px;
+    box-shadow: var(--shadow);
   }
-  .chart-wrap h3 { font-size: .85rem; color: var(--muted); margin-bottom: 16px; }
-  .chart-wrap canvas { max-height: 220px; }
+  .chart-wrap .ch-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .chart-wrap .ch-title { font-size: 1rem; font-weight: 700; }
+  .chart-wrap .ch-sub   { font-size: .8rem; color: var(--muted); }
+  .chart-wrap canvas    { max-height: 240px; }
 
-  /* ── Coming soon ── */
-  .coming-soon {
+  /* ── Empty / coming soon ── */
+  .empty-state {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--r); padding: 40px 24px; text-align: center;
-    color: var(--muted); margin-bottom: 24px;
+    border-radius: var(--r); padding: 52px 32px; text-align: center;
+    box-shadow: var(--shadow); margin-bottom: 20px;
   }
-  .coming-soon .icon { font-size: 2.2rem; margin-bottom: 12px; }
-  .coming-soon strong { display: block; color: var(--text); margin-bottom: 6px; }
+  .empty-state .es-icon { font-size: 2.8rem; margin-bottom: 16px; }
+  .empty-state h3  { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .empty-state p   { color: var(--muted); font-size: .9rem; max-width: 380px; margin: 0 auto; }
 
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  /* ── Table ── */
+  .tbl-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); overflow: hidden; margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .tbl-wrap .tbl-hdr {
+    padding: 20px 24px; font-weight: 700; font-size: .95rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .tbl-wrap .tbl-hdr .tbl-count { font-size: .8rem; color: var(--muted); font-weight: 400; }
+  table { width: 100%; border-collapse: collapse; }
+  th { padding: 11px 20px; text-align: right; font-size: .75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; background: var(--bg); border-bottom: 1px solid var(--border); }
+  td { padding: 13px 20px; font-size: .9rem; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+  td.rank { color: var(--muted); font-size: .8rem; width: 36px; }
+  td.num  { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  td.date { color: var(--muted); font-size: .82rem; direction: ltr; white-space: nowrap; }
+  td.title-cell { max-width: 420px; }
+  td.title-cell a { color: var(--text); text-decoration: none; font-weight: 500; }
+  td.title-cell a:hover { color: var(--accent); text-decoration: underline; }
+  .bar-bg   { background: var(--border); border-radius: 4px; height: 4px; margin-top: 6px; }
+  .bar-fill { height: 100%; border-radius: 4px; background: var(--accent); opacity: .5; }
 
-  @media (max-width: 600px) {
-    .ep-thumb, .ep-thumb-placeholder { width: 100%; height: 180px; }
+  /* ── Tabs ── */
+  .tab-row { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tab-btn {
+    padding: 9px 20px; border-radius: 10px; font-size: .875rem; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--muted); transition: all .15s;
+  }
+  .tab-btn:hover  { border-color: var(--accent); color: var(--accent); }
+  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .topbar { padding: 0 16px; }
+    .main   { padding: 24px 16px 60px; }
+    .ep-thumb { width: 100%; height: 180px; }
+    .cards { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- Password -->
+<!-- ── Password overlay ── -->
 <div id="pw-overlay">
   <div id="pw-box">
-    <div style="font-size:2.5rem;margin-bottom:14px">🎙️</div>
+    <div class="pw-icon">🎙️</div>
     <h2>יוצאים בשאלה</h2>
-    <p>דשבורד ביצועים</p>
-    <input id="pw-input" type="password" placeholder="סיסמה" autocomplete="current-password">
-    <button id="pw-btn" onclick="checkPassword()">כניסה</button>
+    <p>פודקאסט הלל · דשבורד ביצועים</p>
+    <input id="pw-input" type="password" placeholder="הכנס סיסמה" autocomplete="current-password">
+    <button id="pw-btn" onclick="checkPassword()">כניסה לדשבורד</button>
     <div id="pw-err"></div>
   </div>
 </div>
 
-<!-- App -->
+<!-- ── App ── -->
 <div id="app">
-  <header>
-    <div class="header-left">
-      <div class="logo">🎙️</div>
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">🎙️</div>
       <div>
-        <h1>יוצאים בשאלה</h1>
-        <div class="subtitle">דשבורד ביצועים · פודקאסט הלל</div>
+        <div class="topbar h1" style="font-size:1.15rem;font-weight:700">יוצאים בשאלה</div>
+        <div class="sub">פודקאסט הלל · דשבורד ביצועים</div>
       </div>
     </div>
-    <div id="last-updated"></div>
-  </header>
-  <div id="content"><div style="text-align:center;padding:60px;color:var(--muted)">⏳ טוען…</div></div>
+    <div id="last-updated">טוען נתונים…</div>
+  </div>
+
+  <div class="main">
+    <div id="content">
+      <div class="empty-state"><div class="es-icon">⏳</div><h3>טוען נתונים</h3><p>רגע…</p></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -170,107 +260,229 @@ function checkPassword() {
     document.getElementById('app').style.display = 'block';
     loadData();
   } else {
-    document.getElementById('pw-err').textContent = 'סיסמה שגויה';
+    document.getElementById('pw-err').textContent = 'סיסמה שגויה, נסה שוב';
     document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
   }
 }
 document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
 
-const fmt  = n => (n||0).toLocaleString('he-IL');
-const fmtK = n => n >= 1000000 ? (n/1e6).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n||0);
+// ── Helpers ──────────────────────────────────────────────────────────────────
+const fmt  = n => (n || 0).toLocaleString('he-IL');
+const fmtK = n => {
+  n = n || 0;
+  if (n >= 1000000) return (n/1e6).toFixed(1) + 'M';
+  if (n >= 1000)    return (n/1000).toFixed(1) + 'K';
+  return n.toString();
+};
+const fmtDate = s => {
+  if (!s) return '';
+  const d = new Date(s);
+  return d.toLocaleDateString('he-IL', { year:'numeric', month:'long', day:'numeric' });
+};
 
-function card(lbl, val, sub='') {
-  return `<div class="card"><div class="lbl">${lbl}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
+function card(label, value, sub, accent, icon) {
+  return `<div class="card accent-${accent||'purple'}">
+    ${icon ? `<div class="c-icon">${icon}</div>` : ''}
+    <div class="c-lbl">${label}</div>
+    <div class="c-val">${value}</div>
+    ${sub ? `<div class="c-sub">${sub}</div>` : ''}
+  </div>`;
 }
 
+// ── Charts ───────────────────────────────────────────────────────────────────
+Chart.defaults.font.family = "'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
+
+function renderBarChart(id, labels, values, color) {
+  const el = document.getElementById(id);
+  if (!el || !labels.length) return;
+  new Chart(el, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: color + '33', borderColor: color, borderWidth: 2, borderRadius: 6, borderSkipped: false }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => '  ' + fmt(c.parsed.y) } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#6b7190', font: { size: 12 } } },
+        y: { grid: { color: '#e8eaf0' }, ticks: { color: '#6b7190', font: { size: 12 } }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+let DATA = null;
+let audioTab = 'chart';
+let videoTab = 'youtube';
+
 function render(d) {
-  document.getElementById('last-updated').textContent = 'עודכן: ' + (d.updated || '');
+  DATA = d;
   const yt = d.video?.youtube || {};
   const sv = d.video?.spotify_video || {};
   const au = d.audio || {};
+  const ytVideos = (yt.videos || []);
+  const auEps    = (au.episodes || []).sort((a,b) => (b.plays||0)-(a.plays||0));
+
+  document.getElementById('last-updated').textContent = 'עודכן: ' + (d.updated || '—');
 
   let html = '';
 
-  /* ── YouTube section ── */
-  html += `<div class="section-hdr"><div class="sec-badge sec-yt">📺</div>YouTube</div>`;
-
-  const ytVideos = yt.videos || [];
-  const totalViews = yt.total_views || 0;
+  // ── YouTube section ───────────────────────────────────────────────────────
+  html += `
+  <div class="sec-hdr">
+    <div class="icon" style="background:#fff0f0">📺</div>
+    <div>
+      <h2>YouTube</h2>
+      <div class="sec-sub">ערוץ עמותת הלל · <a href="https://www.youtube.com/@hillel-il" target="_blank" style="color:var(--accent)">@hillel-il</a></div>
+    </div>
+  </div>`;
 
   html += `<div class="cards">
-    ${card('סה"כ צפיות', fmtK(totalViews), `${fmt(yt.video_count||0)} פרקים`)}
-    ${card('פרק אחרון', ytVideos.length ? fmtK(ytVideos[0].views) + ' צפיות' : '—', ytVideos.length ? ytVideos[0].date : '')}
+    ${card('סה"כ צפיות', fmtK(yt.total_views||0), `${fmt(yt.video_count||0)} פרקים פורסמו`, 'red', '👁️')}
+    ${card('פרק ראשון', ytVideos.length ? fmtK(ytVideos[0].views)+' צפיות' : '—', ytVideos.length ? fmtDate(ytVideos[0].date) : 'טרם פורסם', 'purple', '🎬')}
   </div>`;
 
   if (ytVideos.length > 0) {
     ytVideos.forEach(ep => {
       const thumb = `https://img.youtube.com/vi/${ep.id}/mqdefault.jpg`;
       html += `<div class="ep-card">
-        <img class="ep-thumb" src="${thumb}" alt="" onerror="this.style.display='none'">
-        <div class="ep-info">
-          <div class="ep-title"><a href="${ep.url}" target="_blank">${ep.title}</a></div>
-          <div class="ep-meta">${ep.date || ''}</div>
+        <img class="ep-thumb" src="${thumb}" alt="${ep.title}" onerror="this.style.display='none'">
+        <div class="ep-body">
+          <span class="ep-badge">פרק וידאו</span>
+          <div class="ep-title"><a href="${ep.url}" target="_blank" rel="noopener">${ep.title}</a></div>
+          <div class="ep-date">📅 ${fmtDate(ep.date)}</div>
           <div class="ep-stats">
-            <div class="ep-stat"><div class="es-val">${fmt(ep.views)}</div><div class="es-lbl">צפיות</div></div>
+            <div class="ep-stat">
+              <div class="es-val">${fmt(ep.views)}</div>
+              <div class="es-lbl">צפיות יוטיוב</div>
+            </div>
           </div>
+          <a class="ep-link" href="${ep.url}" target="_blank" rel="noopener">▶ צפה בסרטון</a>
         </div>
       </div>`;
     });
 
-    if ((yt.monthly||[]).length > 1) {
-      html += `<div class="chart-wrap"><h3>צפיות לפי חודש</h3><canvas id="yt-chart"></canvas></div>`;
+    if ((yt.monthly||[]).length > 0) {
+      html += `<div class="chart-wrap">
+        <div class="ch-hdr"><div class="ch-title">צפיות לפי חודש</div><div class="ch-sub">YouTube</div></div>
+        <canvas id="yt-chart"></canvas>
+      </div>`;
     }
   } else {
-    html += `<div class="coming-soon"><div class="icon">📺</div><strong>פרקי וידאו בקרוב</strong>הסרטונים יופיעו כאן ברגע שיפורסמו</div>`;
-  }
-
-  /* ── Audio section ── */
-  html += `<div class="section-hdr"><div class="sec-badge sec-aud">🎧</div>אודיו — Spreaker</div>`;
-
-  if ((au.episode_count || 0) === 0) {
-    html += `<div class="coming-soon"><div class="icon">🎧</div><strong>פרקי אודיו בקרוב</strong>נתוני ההאזנות יופיעו כאן לאחר פרסום פרקים ב-Spreaker</div>`;
-  } else {
-    html += `<div class="cards">
-      ${card('סה"כ האזנות', fmtK(au.total_plays), 'כל הפלטפורמות')}
-      ${card('פרקים', fmt(au.episode_count), '')}
-      ${card('ממוצע לפרק', fmtK(au.episode_count ? Math.round(au.total_plays/au.episode_count) : 0), 'האזנות')}
+    html += `<div class="empty-state">
+      <div class="es-icon">📺</div>
+      <h3>פרקי וידאו בקרוב</h3>
+      <p>הסרטונים יופיעו כאן ברגע שיפורסמו בערוץ <a href="https://www.youtube.com/@hillel-il" target="_blank" style="color:var(--accent)">@hillel-il</a></p>
     </div>`;
   }
 
-  /* ── Spotify Video ── */
-  if ((sv.total_plays || 0) > 0 || (sv.episodes||[]).length > 0) {
-    html += `<div class="section-hdr"><div class="sec-badge sec-yt">🎵</div>Spotify Video</div>`;
-    html += `<div class="cards">${card('הפעלות', fmtK(sv.total_plays||0), 'Spotify Video')}</div>`;
+  // ── Audio section ─────────────────────────────────────────────────────────
+  html += `
+  <div class="sec-hdr">
+    <div class="icon" style="background:var(--accent-lt)">🎧</div>
+    <div>
+      <h2>אודיו — כל הפלטפורמות</h2>
+      <div class="sec-sub">Spreaker · Apple Podcasts · Spotify Audio · ועוד</div>
+    </div>
+  </div>`;
+
+  if ((au.episode_count||0) === 0) {
+    html += `<div class="empty-state">
+      <div class="es-icon">🎧</div>
+      <h3>פרקי אודיו בקרוב</h3>
+      <p>נתוני ההאזנות יופיעו כאן לאחר פרסום פרקים ב‑Spreaker (מזהה תוכנית: 4956945)</p>
+    </div>`;
+  } else {
+    html += `<div class="cards">
+      ${card('סה"כ האזנות', fmtK(au.total_plays||0), 'כל הפלטפורמות', 'purple', '🎧')}
+      ${card('מספר פרקים', fmt(au.episode_count||0), 'פרקים שפורסמו', 'green', '📋')}
+      ${card('ממוצע לפרק', fmtK(au.episode_count ? Math.round((au.total_plays||0)/au.episode_count) : 0), 'האזנות', 'yellow', '📊')}
+      ${card('חודש אחרון', fmtK((au.monthly||[]).slice(-1)[0]?.plays||0), (au.monthly||[]).slice(-1)[0]?.month||'', 'red', '📅')}
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn ${audioTab==='chart'?'active':''}" onclick="switchTab('audio','chart')">📈 גרף חודשי</button>
+      <button class="tab-btn ${audioTab==='table'?'active':''}" onclick="switchTab('audio','table')">📋 טבלת פרקים</button>
+    </div>
+    <div id="audio-tab"></div>`;
+  }
+
+  // ── Spotify Video section ─────────────────────────────────────────────────
+  if ((sv.total_plays||0) > 0 || (sv.episodes||[]).length > 0) {
+    html += `
+    <div class="sec-hdr">
+      <div class="icon" style="background:#e8f5e9">🎵</div>
+      <div><h2>Spotify Video</h2><div class="sec-sub">הפעלות וידאו ב‑Spotify</div></div>
+    </div>
+    <div class="cards">
+      ${card('הפעלות', fmtK(sv.total_plays||0), 'Spotify Video', 'green', '🎵')}
+    </div>`;
   }
 
   document.getElementById('content').innerHTML = html;
 
-  // Render YT monthly chart if data exists
-  if ((yt.monthly||[]).length > 1) {
-    const monthly = yt.monthly;
-    new Chart(document.getElementById('yt-chart'), {
-      type: 'bar',
-      data: {
-        labels: monthly.map(m => m.month),
-        datasets: [{ data: monthly.map(m => m.views), backgroundColor: '#ff658466', borderColor: '#ff6584', borderWidth: 1, borderRadius: 4 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: true,
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + fmt(c.parsed.y) } } },
-        scales: {
-          x: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#8b8fa8', font: { size: 11 } } },
-          y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#8b8fa8', font: { size: 11 } } }
-        }
-      }
+  // Render charts
+  if ((yt.monthly||[]).length > 0) {
+    renderBarChart('yt-chart', yt.monthly.map(m=>m.month), yt.monthly.map(m=>m.views), '#e94f37');
+  }
+
+  renderAudioTab();
+}
+
+function renderAudioTab() {
+  const el = document.getElementById('audio-tab');
+  if (!el || !DATA) return;
+  const au = DATA.audio || {};
+  const eps = (au.episodes||[]).sort((a,b)=>(b.plays||0)-(a.plays||0));
+
+  if (audioTab === 'chart') {
+    const monthly = au.monthly || [];
+    if (monthly.length === 0) { el.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><h3>אין נתוני גרף עדיין</h3></div>'; return; }
+    el.innerHTML = `<div class="chart-wrap"><div class="ch-hdr"><div class="ch-title">האזנות לפי חודש</div><div class="ch-sub">כל הפלטפורמות</div></div><canvas id="audio-chart"></canvas></div>`;
+    renderBarChart('audio-chart', monthly.map(m=>m.month), monthly.map(m=>m.plays), '#5b4fe9');
+  } else {
+    if (!eps.length) { el.innerHTML = '<div class="empty-state"><div class="es-icon">📋</div><h3>אין פרקים עדיין</h3></div>'; return; }
+    const max = Math.max(...eps.map(e=>e.plays||0)) || 1;
+    const rows = eps.slice(0,50).map((ep,i) => {
+      const pct = ((ep.plays||0)/max*100).toFixed(1);
+      return `<tr>
+        <td class="rank">${i+1}</td>
+        <td class="title-cell">${ep.title || '—'}<div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+        <td class="date">${ep.date||''}</td>
+        <td class="num">${fmt(ep.plays||0)}</td>
+      </tr>`;
+    }).join('');
+    el.innerHTML = `<div class="tbl-wrap">
+      <div class="tbl-hdr"><span>פרקים לפי האזנות</span><span class="tbl-count">${eps.length} פרקים</span></div>
+      <table><thead><tr><th>#</th><th>כותרת</th><th>תאריך</th><th>האזנות</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+  }
+}
+
+function switchTab(section, tab) {
+  if (section === 'audio') {
+    audioTab = tab;
+    document.querySelectorAll('.tab-row .tab-btn').forEach(b => {
+      b.classList.toggle('active',
+        (tab==='chart' && b.textContent.includes('גרף')) ||
+        (tab==='table' && b.textContent.includes('טבלת'))
+      );
     });
+    renderAudioTab();
   }
 }
 
 function loadData() {
   fetch('data.json?t=' + Date.now())
-    .then(r => r.ok ? r.json() : Promise.reject(r.status))
-    .then(render)
-    .catch(e => { document.getElementById('content').innerHTML = `<div style="text-align:center;padding:60px;color:#ff6584">שגיאה בטעינה: ${e}</div>`; });
+    .then(r => r.ok ? r.json() : Promise.reject('HTTP ' + r.status))
+    .then(d => render(d))
+    .catch(e => {
+      document.getElementById('content').innerHTML =
+        `<div class="empty-state"><div class="es-icon">❌</div><h3>שגיאה בטעינת נתונים</h3><p>${e}</p></div>`;
+    });
 }
 </script>
 </body>
