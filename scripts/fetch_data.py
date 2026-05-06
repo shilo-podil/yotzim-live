@@ -9,7 +9,7 @@ import json, sys, time, datetime, subprocess, os
 import requests
 
 SPREAKER_SHOW_ID = os.environ.get('SPREAKER_SHOW_ID', '4956945')
-YOUTUBE_CHANNEL  = os.environ.get('YOUTUBE_CHANNEL', '@mediahillel')
+YOUTUBE_CHANNEL  = os.environ.get('YOUTUBE_CHANNEL', '@hillel-il')
 
 
 # ── Spreaker ──────────────────────────────────────────────────────────────────

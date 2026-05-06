@@ -301,7 +301,7 @@ function renderVideoTab() {
     if ((yt.video_count || 0) === 0) {
       document.getElementById('video-tab-content').innerHTML =
         `<div class="empty" style="padding:50px">📺 ערוץ היוטיוב יתווסף בקרוב<br><br>
-        <a href="${yt.channel_url||'#'}" target="_blank">@mediahillel</a></div>`;
+        <a href="${yt.channel_url||'#'}" target="_blank">@hillel-il</a></div>`;
       return;
     }
     const sorted = [...(yt.videos||[])].sort((a,b) => (b.views||0)-(a.views||0));
