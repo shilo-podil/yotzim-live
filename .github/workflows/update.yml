@@ -1,4 +1,5 @@
 name: Update Dashboard Data
+          SPREAKER_STATS_TOKEN: ${{ secrets.SPREAKER_STATS_TOKEN }}
 
 on:
   schedule:
@@ -32,12 +33,13 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
 
+          SPREAKER_STATS_TOKEN: ${{ secrets.SPREAKER_STATS_TOKEN }}
       - name: Commit and push
         run: |
           git config user.name  "Dashboard Bot"
           git config user.email "bot@github.com"
           git add data.json
-          if git diff --staged --quiet; then
+        f git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git commit -m "chore: update data $(date +%Y-%m-%d)"
