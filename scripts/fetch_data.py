@@ -127,32 +127,59 @@ def compute_monthly(items, key='plays'):
 
 # ── YouTube ───────────────────────────────────────────────────────────────────
 
+def fetch_video_meta(video_id):
+    """Fetch full metadata for a single video to get accurate view count."""
+    try:
+        r = subprocess.run(
+            ['yt-dlp', '--dump-json', '--quiet', '--no-playlist',
+             f'https://www.youtube.com/watch?v={video_id}'],
+            capture_output=True, text=True, timeout=60)
+        if r.returncode == 0 and r.stdout.strip():
+            return json.loads(r.stdout.strip())
+    except Exception:
+        pass
+    return {}
+
 def fetch_youtube_channel():
+    """Step 1: flat-playlist to find podcast episode IDs.
+       Step 2: full metadata fetch per episode for accurate view counts."""
     channel_url = f'https://www.youtube.com/{YOUTUBE_CHANNEL}'
+    # Strict filter — only actual podcast episodes whose titles end with the show tag
+    strict_filter = 'פודקאסט הלל יוצאים בשאלה'
     try:
         result = subprocess.run(
             ['yt-dlp', '--flat-playlist', '--dump-json', '--quiet', channel_url],
             capture_output=True, text=True, timeout=180)
-        videos = []
+        matched_ids = []
         for line in result.stdout.strip().split('\n'):
             line = line.strip()
             if not line:
                 continue
             try:
                 v = json.loads(line)
-                if PODCAST_FILTER not in (v.get('title') or ''):
-                    continue
-                ud = str(v.get('upload_date', '') or '')
-                date_str = f'{ud[:4]}-{ud[4:6]}-{ud[6:8]}' if len(ud) == 8 else ''
-                videos.append({
-                    'id':    v.get('id', ''),
-                    'title': v.get('title', ''),
-                    'date':  date_str,
-                    'views': int(v.get('view_count') or 0),
-                    'url':   f'https://www.youtube.com/watch?v={v.get("id","")}',
-                })
+                title = v.get('title') or ''
+                vid_type = v.get('_type', '')
+                if strict_filter in title and v.get('id') and vid_type != 'playlist':
+                    matched_ids.append(v.get('id'))
             except Exception:
                 continue
+
+        print(f'   Found {len(matched_ids)} podcast episode IDs — fetching full metadata…')
+        videos = []
+        for vid_id in matched_ids:
+            meta = fetch_video_meta(vid_id)
+            if not meta:
+                continue
+            ud = str(meta.get('upload_date', '') or '')
+            date_str = f'{ud[:4]}-{ud[4:6]}-{ud[6:8]}' if len(ud) == 8 else ''
+            videos.append({
+                'id':    vid_id,
+                'title': meta.get('title', ''),
+                'date':  date_str,
+                'views': int(meta.get('view_count') or 0),
+                'url':   f'https://www.youtube.com/watch?v={vid_id}',
+            })
+
         total_views = sum(v['views'] for v in videos)
         videos_sorted = sorted(videos, key=lambda x: x['date'], reverse=True)
         return {
