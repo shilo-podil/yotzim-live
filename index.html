@@ -7,169 +7,134 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg:       #0f1117;
-    --surface:  #1a1d27;
-    --border:   #2a2d3a;
-    --text:     #e8eaf0;
-    --muted:    #8b8fa8;
-    --accent:   #6c63ff;
-    --accent2:  #ff6584;
-    --green:    #43d9ad;
-    --yellow:   #ffd166;
-    --card-r:   14px;
+    --bg:      #0f1117;
+    --surface: #1a1d27;
+    --border:  #2a2d3a;
+    --text:    #e8eaf0;
+    --muted:   #8b8fa8;
+    --accent:  #6c63ff;
+    --accent2: #ff6584;
+    --green:   #43d9ad;
+    --yellow:  #ffd166;
+    --r:       14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    direction: rtl;
-  }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); direction: rtl; }
 
-  /* ── Password overlay ── */
+  /* ── Password ── */
   #pw-overlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: var(--bg);
+    position: fixed; inset: 0; z-index: 9999; background: var(--bg);
     display: flex; align-items: center; justify-content: center;
   }
   #pw-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 48px 40px;
-    width: 340px;
-    text-align: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 48px 40px; width: 340px; text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,.5);
   }
   #pw-box h2 { font-size: 1.5rem; margin-bottom: 6px; }
   #pw-box p  { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
   #pw-input {
-    width: 100%; padding: 12px 16px;
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 10px; color: var(--text);
-    font-size: 1rem; text-align: center;
-    outline: none; margin-bottom: 12px;
-    direction: ltr;
+    width: 100%; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-size: 1rem; text-align: center;
+    outline: none; margin-bottom: 12px; direction: ltr;
   }
   #pw-input:focus { border-color: var(--accent); }
   #pw-btn {
-    width: 100%; padding: 12px;
-    background: var(--accent); border: none; border-radius: 10px;
-    color: #fff; font-size: 1rem; cursor: pointer;
-    transition: opacity .2s;
+    width: 100%; padding: 12px; background: var(--accent); border: none;
+    border-radius: 10px; color: #fff; font-size: 1rem; cursor: pointer; transition: opacity .2s;
   }
   #pw-btn:hover { opacity: .85; }
   #pw-err { color: var(--accent2); font-size: .85rem; margin-top: 10px; min-height: 20px; }
 
   /* ── Layout ── */
-  #app { display: none; max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+  #app { display: none; max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
 
   header {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 36px; flex-wrap: wrap; gap: 12px;
   }
-  .header-title { display: flex; align-items: center; gap: 14px; }
-  .header-title .logo {
-    width: 48px; height: 48px; border-radius: 12px;
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 52px; height: 52px; border-radius: 14px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem;
+    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
   }
-  .header-title h1 { font-size: 1.6rem; font-weight: 700; }
-  .header-title .subtitle { color: var(--muted); font-size: .85rem; margin-top: 2px; }
+  header h1 { font-size: 1.7rem; font-weight: 700; }
+  .subtitle  { color: var(--muted); font-size: .85rem; margin-top: 2px; }
   #last-updated { color: var(--muted); font-size: .82rem; }
 
-  /* ── Section headers ── */
-  .section-title {
+  /* ── Section ── */
+  .section-hdr {
     display: flex; align-items: center; gap: 10px;
-    font-size: 1.15rem; font-weight: 600;
-    margin-bottom: 18px; margin-top: 40px;
+    font-size: 1.1rem; font-weight: 600; margin: 40px 0 18px;
   }
-  .section-title .badge {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem;
+  .sec-badge {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
   }
-  .badge-audio { background: rgba(108,99,255,.2); }
-  .badge-video { background: rgba(255,101,132,.2); }
+  .sec-yt  { background: rgba(255,101,132,.18); }
+  .sec-aud { background: rgba(108,99,255,.18); }
 
-  /* ── Stat cards ── */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .card {
+  /* ── Cards ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 22px 20px; }
+  .card .lbl { color: var(--muted); font-size: .78rem; margin-bottom: 8px; }
+  .card .val { font-size: 1.9rem; font-weight: 700; line-height: 1; }
+  .card .sub { color: var(--muted); font-size: .76rem; margin-top: 6px; }
+
+  /* ── Episode card ── */
+  .ep-card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--card-r); padding: 22px 20px;
+    border-radius: var(--r); padding: 24px 24px; margin-bottom: 24px;
+    display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;
   }
-  .card .label { color: var(--muted); font-size: .8rem; margin-bottom: 8px; }
-  .card .value { font-size: 1.8rem; font-weight: 700; line-height: 1; }
-  .card .sub   { color: var(--muted); font-size: .78rem; margin-top: 6px; }
+  .ep-thumb {
+    width: 180px; height: 101px; border-radius: 10px; object-fit: cover;
+    background: var(--border); flex-shrink: 0;
+  }
+  .ep-thumb-placeholder {
+    width: 180px; height: 101px; border-radius: 10px;
+    background: linear-gradient(135deg, #2a2d3a, #1a1d27);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; flex-shrink: 0;
+  }
+  .ep-info { flex: 1; min-width: 200px; }
+  .ep-info .ep-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+  .ep-info .ep-title a { color: var(--text); text-decoration: none; }
+  .ep-info .ep-title a:hover { color: var(--accent); }
+  .ep-info .ep-meta { color: var(--muted); font-size: .82rem; margin-bottom: 14px; }
+  .ep-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+  .ep-stat .es-val { font-size: 1.4rem; font-weight: 700; color: var(--green); }
+  .ep-stat .es-lbl { color: var(--muted); font-size: .75rem; }
 
-  /* ── Chart containers ── */
+  /* ── Chart ── */
   .chart-wrap {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--card-r); padding: 24px 20px;
-    margin-bottom: 24px;
+    border-radius: var(--r); padding: 24px 20px; margin-bottom: 24px;
   }
-  .chart-wrap h3 { font-size: .9rem; color: var(--muted); margin-bottom: 16px; }
-  .chart-wrap canvas { max-height: 260px; }
+  .chart-wrap h3 { font-size: .85rem; color: var(--muted); margin-bottom: 16px; }
+  .chart-wrap canvas { max-height: 220px; }
 
-  /* ── Tables ── */
-  .table-wrap {
+  /* ── Coming soon ── */
+  .coming-soon {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--card-r); overflow: hidden;
-    margin-bottom: 24px;
+    border-radius: var(--r); padding: 40px 24px; text-align: center;
+    color: var(--muted); margin-bottom: 24px;
   }
-  .table-wrap h3 {
-    padding: 16px 20px; font-size: .9rem;
-    color: var(--muted); border-bottom: 1px solid var(--border);
-  }
-  table { width: 100%; border-collapse: collapse; }
-  th {
-    padding: 10px 16px; text-align: right;
-    font-size: .75rem; color: var(--muted);
-    background: rgba(255,255,255,.03);
-    border-bottom: 1px solid var(--border);
-  }
-  td {
-    padding: 11px 16px; font-size: .85rem;
-    border-bottom: 1px solid rgba(255,255,255,.04);
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(255,255,255,.03); }
-  td.num { font-variant-numeric: tabular-nums; color: var(--green); font-weight: 600; }
-  td.date { color: var(--muted); font-size: .8rem; direction: ltr; }
-  .rank { color: var(--muted); font-size: .78rem; }
-
-  .bar-bg {
-    background: rgba(255,255,255,.07); border-radius: 4px;
-    height: 6px; margin-top: 5px; overflow: hidden;
-  }
-  .bar-fill { height: 100%; border-radius: 4px; background: var(--accent); }
-
-  /* ── Tabs ── */
-  .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-  .tab {
-    padding: 8px 18px; border-radius: 8px; font-size: .85rem;
-    cursor: pointer; border: 1px solid var(--border);
-    background: transparent; color: var(--muted);
-    transition: all .2s;
-  }
-  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-  /* ── Loading / empty ── */
-  .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .empty   { text-align: center; padding: 40px 20px; color: var(--muted); font-size: .9rem; }
-
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  .coming-soon .icon { font-size: 2.2rem; margin-bottom: 12px; }
+  .coming-soon strong { display: block; color: var(--text); margin-bottom: 6px; }
 
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .ep-thumb, .ep-thumb-placeholder { width: 100%; height: 180px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ── Password overlay ── -->
+<!-- Password -->
 <div id="pw-overlay">
   <div id="pw-box">
     <div style="font-size:2.5rem;margin-bottom:14px">🎙️</div>
@@ -181,226 +146,131 @@
   </div>
 </div>
 
-<!-- ── Main app ── -->
+<!-- App -->
 <div id="app">
   <header>
-    <div class="header-title">
+    <div class="header-left">
       <div class="logo">🎙️</div>
       <div>
         <h1>יוצאים בשאלה</h1>
-        <div class="subtitle">דשבורד ביצועים</div>
+        <div class="subtitle">דשבורד ביצועים · פודקאסט הלל</div>
       </div>
     </div>
-    <div id="last-updated">טוען נתונים…</div>
+    <div id="last-updated"></div>
   </header>
-
-  <div id="main-content"><div class="loading">⏳ טוען נתונים…</div></div>
+  <div id="content"><div style="text-align:center;padding:60px;color:var(--muted)">⏳ טוען…</div></div>
 </div>
 
 <script>
-// ── Auth ─────────────────────────────────────────────────────────────────────
 const PASSWORD = 'iritirit';
 
 function checkPassword() {
-  const v = document.getElementById('pw-input').value;
-  if (v === PASSWORD) {
+  if (document.getElementById('pw-input').value === PASSWORD) {
     document.getElementById('pw-overlay').style.display = 'none';
     document.getElementById('app').style.display = 'block';
-    initDashboard();
+    loadData();
   } else {
     document.getElementById('pw-err').textContent = 'סיסמה שגויה';
     document.getElementById('pw-input').value = '';
   }
 }
-document.getElementById('pw-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') checkPassword();
-});
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-const fmt  = n => (n || 0).toLocaleString('he-IL');
-const fmtK = n => n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n||0);
+const fmt  = n => (n||0).toLocaleString('he-IL');
+const fmtK = n => n >= 1000000 ? (n/1e6).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n||0);
 
-function card(label, value, sub='') {
-  return `<div class="card">
-    <div class="label">${label}</div>
-    <div class="value">${value}</div>
-    ${sub ? `<div class="sub">${sub}</div>` : ''}
+function card(lbl, val, sub='') {
+  return `<div class="card"><div class="lbl">${lbl}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
+}
+
+function render(d) {
+  document.getElementById('last-updated').textContent = 'עודכן: ' + (d.updated || '');
+  const yt = d.video?.youtube || {};
+  const sv = d.video?.spotify_video || {};
+  const au = d.audio || {};
+
+  let html = '';
+
+  /* ── YouTube section ── */
+  html += `<div class="section-hdr"><div class="sec-badge sec-yt">📺</div>YouTube</div>`;
+
+  const ytVideos = yt.videos || [];
+  const totalViews = yt.total_views || 0;
+
+  html += `<div class="cards">
+    ${card('סה"כ צפיות', fmtK(totalViews), `${fmt(yt.video_count||0)} פרקים`)}
+    ${card('פרק אחרון', ytVideos.length ? fmtK(ytVideos[0].views) + ' צפיות' : '—', ytVideos.length ? ytVideos[0].date : '')}
   </div>`;
-}
 
-// ── Charts ───────────────────────────────────────────────────────────────────
-const CHART_DEFAULTS = {
-  responsive: true,
-  maintainAspectRatio: true,
-  plugins: { legend: { display: false } },
-  scales: {
-    x: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#8b8fa8', font: { size: 11 } } },
-    y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#8b8fa8', font: { size: 11 } } },
-  }
-};
-
-function monthlyChart(canvasId, monthly, color, key) {
-  if (!monthly || monthly.length === 0) return;
-  const labels = monthly.map(m => m.month);
-  const values = monthly.map(m => m[key] || 0);
-  new Chart(document.getElementById(canvasId), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{ data: values, backgroundColor: color + '99', borderColor: color, borderWidth: 1, borderRadius: 4 }]
-    },
-    options: { ...CHART_DEFAULTS, plugins: { ...CHART_DEFAULTS.plugins, tooltip: {
-      callbacks: { label: ctx => ' ' + fmt(ctx.parsed.y) }
-    }}}
-  });
-}
-
-// ── Episode tables ────────────────────────────────────────────────────────────
-function episodeTable(episodes, valueKey, valueLbl, linkFn) {
-  if (!episodes || episodes.length === 0) return '<div class="empty">אין פרקים עדיין</div>';
-  const maxVal = Math.max(...episodes.map(e => e[valueKey] || 0)) || 1;
-  const rows = episodes.slice(0, 50).map((ep, i) => {
-    const val = ep[valueKey] || 0;
-    const pct = (val / maxVal * 100).toFixed(1);
-    const link = linkFn ? `<a href="${linkFn(ep)}" target="_blank">${ep.title}</a>` : ep.title;
-    return `<tr>
-      <td class="rank">${i+1}</td>
-      <td>${link}<div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div></td>
-      <td class="date">${ep.date || ''}</td>
-      <td class="num">${fmt(val)}</td>
-    </tr>`;
-  }).join('');
-  return `<table>
-    <thead><tr><th>#</th><th>פרק</th><th>תאריך</th><th>${valueLbl}</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
-
-// ── Render ────────────────────────────────────────────────────────────────────
-let DATA = null;
-let activeAudioTab = 'chart';
-let activeVideoTab = 'youtube';
-
-function renderAudioTab() {
-  const audio = DATA.audio;
-  if (activeAudioTab === 'chart') {
-    document.getElementById('audio-tab-content').innerHTML =
-      `<div class="chart-wrap"><h3>האזנות לפי חודש</h3><canvas id="audio-monthly-chart"></canvas></div>`;
-    monthlyChart('audio-monthly-chart', audio.monthly, '#6c63ff', 'plays');
-  } else {
-    const sorted = [...(audio.episodes||[])].sort((a,b) => (b.plays||0)-(a.plays||0));
-    document.getElementById('audio-tab-content').innerHTML =
-      `<div class="table-wrap"><h3>כל הפרקים לפי האזנות</h3>${episodeTable(sorted,'plays','האזנות',null)}</div>`;
-  }
-}
-
-function renderVideoTab() {
-  const video = DATA.video;
-  if (activeVideoTab === 'youtube') {
-    const yt = video.youtube || {};
-    if ((yt.video_count || 0) === 0) {
-      document.getElementById('video-tab-content').innerHTML =
-        `<div class="empty" style="padding:50px">📺 ערוץ היוטיוב יתווסף בקרוב<br><br>
-        <a href="${yt.channel_url||'#'}" target="_blank">@hillel-il</a></div>`;
-      return;
-    }
-    const sorted = [...(yt.videos||[])].sort((a,b) => (b.views||0)-(a.views||0));
-    document.getElementById('video-tab-content').innerHTML =
-      `<div class="chart-wrap"><h3>צפיות לפי חודש</h3><canvas id="yt-monthly-chart"></canvas></div>
-       <div class="table-wrap"><h3>סרטונים לפי צפיות</h3>${episodeTable(sorted,'views','צפיות',ep=>`https://www.youtube.com/watch?v=${ep.id}`)}</div>`;
-    monthlyChart('yt-monthly-chart', yt.monthly||[], '#ff6584', 'views');
-  } else {
-    const sv = video.spotify_video || {};
-    const eps = sv.episodes || [];
-    if (eps.length === 0) {
-      document.getElementById('video-tab-content').innerHTML =
-        `<div class="empty" style="padding:50px">🎵 נתוני ספוטיפיי וידאו יתווספו ידנית<br><br>
-        <small style="color:#8b8fa8">עדכן את data.json תחת video.spotify_video</small></div>`;
-    } else {
-      document.getElementById('video-tab-content').innerHTML =
-        `<div class="table-wrap"><h3>ספוטיפיי וידאו – פרקים</h3>${episodeTable(eps,'plays','הפעלות',null)}</div>`;
-    }
-  }
-}
-
-function render(data) {
-  DATA = data;
-  const audio = data.audio || {};
-  const video = data.video || {};
-  const yt    = video.youtube || {};
-  const sv    = video.spotify_video || {};
-
-  document.getElementById('last-updated').textContent = `עודכן: ${data.updated || 'לא ידוע'}`;
-
-  const totalVideo = (yt.total_views||0) + (sv.total_plays||0);
-
-  document.getElementById('main-content').innerHTML = `
-
-    <!-- Audio section -->
-    <div class="section-title">
-      <div class="badge badge-audio">🎧</div>
-      <span>אודיו — כל הפלטפורמות</span>
-    </div>
-    <div class="cards">
-      ${card('סה"כ האזנות', fmtK(audio.total_plays||0), 'כל הפלטפורמות דרך Spreaker')}
-      ${card('מספר פרקים', fmt(audio.episode_count||0), 'פרקים פורסמו')}
-      ${card('ממוצע לפרק', fmtK(audio.episode_count ? Math.round((audio.total_plays||0)/(audio.episode_count)) : 0), 'האזנות')}
-      ${card('חודש אחרון', fmtK((audio.monthly||[]).slice(-1)[0]?.plays||0), (audio.monthly||[]).slice(-1)[0]?.month||'')}
-    </div>
-
-    <div class="tabs">
-      <button class="tab ${activeAudioTab==='chart'?'active':''}" onclick="switchAudioTab('chart')">גרף חודשי</button>
-      <button class="tab ${activeAudioTab==='table'?'active':''}" onclick="switchAudioTab('table')">טבלת פרקים</button>
-    </div>
-    <div id="audio-tab-content"></div>
-
-    <!-- Video section -->
-    <div class="section-title">
-      <div class="badge badge-video">📺</div>
-      <span>וידאו</span>
-    </div>
-    <div class="cards">
-      ${card('סה"כ צפיות', fmtK(totalVideo), 'YouTube + Spotify Video')}
-      ${card('YouTube — צפיות', fmtK(yt.total_views||0), `${fmt(yt.video_count||0)} סרטונים`)}
-      ${card('Spotify Video', fmtK(sv.total_plays||0), 'הפעלות')}
-    </div>
-
-    <div class="tabs">
-      <button class="tab ${activeVideoTab==='youtube'?'active':''}" onclick="switchVideoTab('youtube')">YouTube</button>
-      <button class="tab ${activeVideoTab==='spotify'?'active':''}" onclick="switchVideoTab('spotify')">Spotify Video</button>
-    </div>
-    <div id="video-tab-content"></div>
-  `;
-
-  renderAudioTab();
-  renderVideoTab();
-}
-
-function switchAudioTab(tab) {
-  activeAudioTab = tab;
-  document.querySelectorAll('.tabs').forEach((el, i) => {
-    if (i === 0) el.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent.includes(tab==='chart'?'גרף':'טבלת')));
-  });
-  renderAudioTab();
-}
-
-function switchVideoTab(tab) {
-  activeVideoTab = tab;
-  document.querySelectorAll('.tabs').forEach((el, i) => {
-    if (i === 1) el.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent.includes(tab==='youtube'?'YouTube':'Spotify')));
-  });
-  renderVideoTab();
-}
-
-// ── Bootstrap ─────────────────────────────────────────────────────────────────
-function initDashboard() {
-  fetch('data.json?t=' + Date.now())
-    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(data => render(data))
-    .catch(err => {
-      document.getElementById('main-content').innerHTML =
-        `<div class="loading">❌ שגיאה בטעינת נתונים: ${err.message}</div>`;
+  if (ytVideos.length > 0) {
+    ytVideos.forEach(ep => {
+      const thumb = `https://img.youtube.com/vi/${ep.id}/mqdefault.jpg`;
+      html += `<div class="ep-card">
+        <img class="ep-thumb" src="${thumb}" alt="" onerror="this.style.display='none'">
+        <div class="ep-info">
+          <div class="ep-title"><a href="${ep.url}" target="_blank">${ep.title}</a></div>
+          <div class="ep-meta">${ep.date || ''}</div>
+          <div class="ep-stats">
+            <div class="ep-stat"><div class="es-val">${fmt(ep.views)}</div><div class="es-lbl">צפיות</div></div>
+          </div>
+        </div>
+      </div>`;
     });
+
+    if ((yt.monthly||[]).length > 1) {
+      html += `<div class="chart-wrap"><h3>צפיות לפי חודש</h3><canvas id="yt-chart"></canvas></div>`;
+    }
+  } else {
+    html += `<div class="coming-soon"><div class="icon">📺</div><strong>פרקי וידאו בקרוב</strong>הסרטונים יופיעו כאן ברגע שיפורסמו</div>`;
+  }
+
+  /* ── Audio section ── */
+  html += `<div class="section-hdr"><div class="sec-badge sec-aud">🎧</div>אודיו — Spreaker</div>`;
+
+  if ((au.episode_count || 0) === 0) {
+    html += `<div class="coming-soon"><div class="icon">🎧</div><strong>פרקי אודיו בקרוב</strong>נתוני ההאזנות יופיעו כאן לאחר פרסום פרקים ב-Spreaker</div>`;
+  } else {
+    html += `<div class="cards">
+      ${card('סה"כ האזנות', fmtK(au.total_plays), 'כל הפלטפורמות')}
+      ${card('פרקים', fmt(au.episode_count), '')}
+      ${card('ממוצע לפרק', fmtK(au.episode_count ? Math.round(au.total_plays/au.episode_count) : 0), 'האזנות')}
+    </div>`;
+  }
+
+  /* ── Spotify Video ── */
+  if ((sv.total_plays || 0) > 0 || (sv.episodes||[]).length > 0) {
+    html += `<div class="section-hdr"><div class="sec-badge sec-yt">🎵</div>Spotify Video</div>`;
+    html += `<div class="cards">${card('הפעלות', fmtK(sv.total_plays||0), 'Spotify Video')}</div>`;
+  }
+
+  document.getElementById('content').innerHTML = html;
+
+  // Render YT monthly chart if data exists
+  if ((yt.monthly||[]).length > 1) {
+    const monthly = yt.monthly;
+    new Chart(document.getElementById('yt-chart'), {
+      type: 'bar',
+      data: {
+        labels: monthly.map(m => m.month),
+        datasets: [{ data: monthly.map(m => m.views), backgroundColor: '#ff658466', borderColor: '#ff6584', borderWidth: 1, borderRadius: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + fmt(c.parsed.y) } } },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#8b8fa8', font: { size: 11 } } },
+          y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#8b8fa8', font: { size: 11 } } }
+        }
+      }
+    });
+  }
+}
+
+function loadData() {
+  fetch('data.json?t=' + Date.now())
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(render)
+    .catch(e => { document.getElementById('content').innerHTML = `<div style="text-align:center;padding:60px;color:#ff6584">שגיאה בטעינה: ${e}</div>`; });
 }
 </script>
 </body>
