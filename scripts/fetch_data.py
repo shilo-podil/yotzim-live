@@ -22,6 +22,7 @@ SPOTIFY_REFRESH_TOK = os.environ.get('SPOTIFY_REFRESH_TOKEN', '')
 
 def spotify_access_token():
     """Exchange refresh token for a fresh access token."""
+    global SPOTIFY_REFRESH_TOK
     if not SPOTIFY_CLIENT_ID or not SPOTIFY_REFRESH_TOK:
         print('Spotify credentials not set — skipping', file=sys.stderr)
         return None
@@ -34,7 +35,6 @@ def spotify_access_token():
     r.raise_for_status()
     tok = r.json().get('access_token')
     # Save new refresh token if provided
-    global SPOTIFY_REFRESH_TOK
     new_rt = r.json().get('refresh_token')
     if new_rt:
         SPOTIFY_REFRESH_TOK = new_rt
