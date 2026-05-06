@@ -1,266 +1,211 @@
 #!/usr/bin/env python3
 """
-Daily data fetcher for יוצאים בשאלה podcast dashboard.
-Sources:
-  - Spreaker (show 4956945)  → all audio platforms
-  - YouTube @hillel-il       → filter to יוצאים בשאלה episodes only
-  - Spotify (OAuth)          → followers, episode plays, demographics
+Daily data fetcher for podcast dashboard.
+Spreaker stats via the private CMS OAuth token (SPREAKER_STATS_TOKEN).
+Spotify via OAuth refresh token.  YouTube via yt-dlp flat-playlist.
 """
-import json, sys, time, datetime, subprocess, os, base64
-import requests
+import json, sys, time, datetime, subprocess, os, requests
 
+# Config
 SPREAKER_SHOW_ID    = os.environ.get('SPREAKER_SHOW_ID', '4956945')
+SPREAKER_STATS_TOK  = os.environ.get('SPREAKER_STATS_TOKEN', '')
 YOUTUBE_CHANNEL     = os.environ.get('YOUTUBE_CHANNEL', '@hillel-il')
 PODCAST_FILTER      = 'יוצאים בשאלה'
-SPOTIFY_SHOW_ID     = os.environ.get('SPOTIFY_SHOW_ID', '5UZLdyA62VDlfnyk51CgBH')
+
 SPOTIFY_CLIENT_ID   = os.environ.get('SPOTIFY_CLIENT_ID', '')
 SPOTIFY_CLIENT_SEC  = os.environ.get('SPOTIFY_CLIENT_SECRET', '')
 SPOTIFY_REFRESH_TOK = os.environ.get('SPOTIFY_REFRESH_TOKEN', '')
+SPOTIFY_SHOW_ID     = '5UZLdyA62VDlfnyk51CgBH'
+
+KNOWN_YT_IDS = ['xbq8AYlRHc4']
 
 
-# ── Spotify ───────────────────────────────────────────────────────────────────
-
-def spotify_access_token():
-    """Exchange refresh token for a fresh access token."""
-    global SPOTIFY_REFRESH_TOK
-    if not SPOTIFY_CLIENT_ID or not SPOTIFY_REFRESH_TOK:
-        print('Spotify credentials not set — skipping', file=sys.stderr)
+def _spreaker_get(path, params=None):
+    if not SPREAKER_STATS_TOK:
         return None
-    creds = base64.b64encode(f'{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SEC}'.encode()).decode()
-    r = requests.post('https://accounts.spotify.com/api/token',
-        headers={'Authorization': f'Basic {creds}',
-                 'Content-Type': 'application/x-www-form-urlencoded'},
-        data={'grant_type': 'refresh_token', 'refresh_token': SPOTIFY_REFRESH_TOK},
-        timeout=20)
-    r.raise_for_status()
-    tok = r.json().get('access_token')
-    # Save new refresh token if provided
-    new_rt = r.json().get('refresh_token')
-    if new_rt:
-        SPOTIFY_REFRESH_TOK = new_rt
-    return tok
-
-def fetch_spotify(token):
-    if not token:
-        return {'followers': 0, 'total_episodes': 0, 'episodes': [], 'error': 'no token'}
-    hdrs = {'Authorization': f'Bearer {token}'}
+    p = dict(params or {})
+    p['oauth2_access_token'] = SPREAKER_STATS_TOK
     try:
-        # Show metadata (followers, episode count)
-        show = requests.get(
-            f'https://api.spotify.com/v1/shows/{SPOTIFY_SHOW_ID}?market=IL',
-            headers=hdrs, timeout=20).json()
-
-        followers    = show.get('followers', {}).get('total', 0) or 0
-        total_eps    = show.get('total_episodes', 0) or 0
-        show_name    = show.get('name', 'יוצאים בשאלה')
-
-        # Episodes list
-        episodes = []
-        ep_url = f'https://api.spotify.com/v1/shows/{SPOTIFY_SHOW_ID}/episodes?limit=50&market=IL'
-        while ep_url:
-            ep_r = requests.get(ep_url, headers=hdrs, timeout=20).json()
-            for ep in (ep_r.get('items') or []):
-                if not ep:
-                    continue
-                episodes.append({
-                    'id':          ep.get('id', ''),
-                    'title':       ep.get('name', ''),
-                    'date':        (ep.get('release_date') or '')[:10],
-                    'duration_ms': ep.get('duration_ms', 0),
-                    'url':         ep.get('external_urls', {}).get('spotify', ''),
-                })
-            ep_url = ep_r.get('next')
-            if ep_url:
-                time.sleep(0.2)
-
-        return {
-            'show_name':      show_name,
-            'followers':      followers,
-            'total_episodes': total_eps,
-            'episodes':       episodes,
-        }
+        r = requests.get(f'https://api.spreaker.com/v2{path}', params=p, timeout=30)
+        r.raise_for_status()
+        return r.json().get('response', {})
     except Exception as e:
-        print(f'Spotify fetch error: {e}', file=sys.stderr)
-        return {'followers': 0, 'total_episodes': 0, 'episodes': [], 'error': str(e)}
+        print(f'Spreaker API error {path}: {e}', file=sys.stderr)
+        return None
 
 
-# ── Spreaker ──────────────────────────────────────────────────────────────────
+def fetch_spreaker_stats():
+    today    = datetime.date.today().isoformat()
+    from_30d = (datetime.date.today() - datetime.timedelta(days=29)).isoformat()
+    from_all = '2016-01-01'
 
-def fetch_spreaker_episodes():
+    r_all = _spreaker_get(f'/shows/{SPREAKER_SHOW_ID}/statistics/plays/totals',
+                          {'from': from_all, 'to': today})
+    total_all_time = (r_all or {}).get('statistics', {}).get('downloads_count', 0)
+
+    r_30 = _spreaker_get(f'/shows/{SPREAKER_SHOW_ID}/statistics/plays/totals',
+                         {'from': from_30d, 'to': today})
+    total_30d = (r_30 or {}).get('statistics', {}).get('downloads_count', 0)
+
+    r_daily = _spreaker_get(f'/shows/{SPREAKER_SHOW_ID}/statistics/plays',
+                            {'from': from_30d, 'to': today, 'group': 'day'})
+    daily = [{'date': d['date'], 'downloads': d['downloads_count']}
+             for d in (r_daily or {}).get('statistics', [])]
+
+    r_eps = _spreaker_get(f'/shows/{SPREAKER_SHOW_ID}/episodes/statistics/plays/totals',
+                          {'from': from_30d, 'to': today, 'limit': 20})
+    episode_stats_30d = {}
+    for item in (r_eps or {}).get('items', []):
+        episode_stats_30d[item['episode_id']] = item['downloads_count']
+
     episodes = []
     url = (f'https://api.spreaker.com/v2/shows/{SPREAKER_SHOW_ID}'
-           f'/episodes?limit=100')
-    page = 0
+           f'/episodes?limit=100&filter=listenable')
     while url:
         try:
             r = requests.get(url, timeout=30)
             r.raise_for_status()
-            data = r.json()
-            resp = data.get('response', {})
-            for ep in (resp.get('items') or []):
-                pub = ep.get('published_at', '') or ''
+            data = r.json().get('response', {})
+            for ep in data.get('items', []):
+                eid = ep.get('episode_id', '')
                 episodes.append({
-                    'id':       ep.get('episode_id', ''),
+                    'id':       eid,
                     'title':    ep.get('title', ''),
-                    'date':     pub[:10],
-                    'plays':    int(ep.get('plays', 0) or 0),
+                    'date':     (ep.get('published_at', '') or '')[:10],
+                    'plays':    episode_stats_30d.get(eid, 0),
                     'duration': int(ep.get('duration', 0) or 0),
                 })
-            url = resp.get('next_url') or None
-            page += 1
+            url = data.get('next_url') or None
             if url:
                 time.sleep(0.3)
         except Exception as e:
-            print(f'Spreaker page {page} error: {e}', file=sys.stderr)
+            print(f'Spreaker episodes error: {e}', file=sys.stderr)
             break
-    return episodes
 
-def compute_monthly(items, key='plays'):
-    monthly = {}
-    for ep in items:
-        d = ep.get('date', '')
-        if d and len(d) >= 7:
-            m = d[:7]
-            monthly[m] = monthly.get(m, 0) + (ep.get(key) or 0)
-    return [{'month': m, key: p} for m, p in sorted(monthly.items())]
+    episodes.sort(key=lambda x: x['date'], reverse=True)
+    return {
+        'total_downloads_all_time': total_all_time,
+        'total_downloads_30d':      total_30d,
+        'daily':                    daily,
+        'episode_count':            len(episodes),
+        'episodes':                 episodes,
+    }
 
 
-# ── YouTube ───────────────────────────────────────────────────────────────────
-
-# Known podcast episode IDs — always included regardless of channel scan
-KNOWN_EPISODE_IDS = ['xbq8AYlRHc4']
-
-def fetch_youtube_channel():
-    """Flat-playlist scan of channel to discover podcast episodes.
-    Always includes KNOWN_EPISODE_IDS as a seed.
-    View counts come from yt-dlp flat metadata where available."""
+def fetch_youtube():
     channel_url = f'https://www.youtube.com/{YOUTUBE_CHANNEL}'
     try:
         result = subprocess.run(
             ['yt-dlp', '--flat-playlist', '--dump-json', '--quiet', channel_url],
             capture_output=True, text=True, timeout=180)
-
-        # Start with known IDs so they are always present
-        seen_ids  = set(KNOWN_EPISODE_IDS)
-        episodes  = {}  # id -> partial metadata from flat-playlist
-
+        videos = {}
         for line in result.stdout.strip().split('\n'):
-            line = line.strip()
-            if not line:
+            if not line.strip():
                 continue
             try:
                 v = json.loads(line)
-                title    = v.get('title') or ''
-                vid_type = v.get('_type', '')
-                vid_id   = v.get('id', '')
-                # Podcast episodes must mention both the show name and the word פודקאסט
+                title  = v.get('title') or ''
+                vid_id = v.get('id', '')
+                vtype  = v.get('_type', '')
                 if (PODCAST_FILTER in title and 'פודקאסט' in title
-                        and vid_id and vid_type != 'playlist'):
-                    seen_ids.add(vid_id)
+                        and vid_id and vtype != 'playlist'):
                     ud = str(v.get('upload_date', '') or '')
-                    date_str = f'{ud[:4]}-{ud[4:6]}-{ud[6:8]}' if len(ud) == 8 else ''
-                    episodes[vid_id] = {
-                        'id':    vid_id,
-                        'title': title,
-                        'date':  date_str,
+                    videos[vid_id] = {
+                        'id': vid_id, 'title': title,
+                        'date': (f'{ud[:4]}-{ud[4:6]}-{ud[6:8]}' if len(ud) == 8 else ''),
                         'views': int(v.get('view_count') or 0),
-                        'url':   f'https://www.youtube.com/watch?v={vid_id}',
+                        'url': f'https://www.youtube.com/watch?v={vid_id}',
                     }
             except Exception:
                 continue
-
-        # Add any known IDs that were not found in the channel scan
-        for vid_id in KNOWN_EPISODE_IDS:
-            if vid_id not in episodes:
-                episodes[vid_id] = {
-                    'id':    vid_id,
-                    'title': '',   # title will be populated once yt-dlp can reach it
-                    'date':  '',
-                    'views': 0,
-                    'url':   f'https://www.youtube.com/watch?v={vid_id}',
-                }
-
-        print(f'   Found {len(episodes)} podcast episode(s)')
-        videos = list(episodes.values())
-        total_views = sum(v['views'] for v in videos)
-        videos_sorted = sorted(videos, key=lambda x: x['date'], reverse=True)
-        return {
-            'channel_url': channel_url,
-            'total_views': total_views,
-            'video_count': len(videos),
-            'videos':      videos_sorted,
-            'monthly':     compute_monthly(videos_sorted, 'views'),
-        }
+        for vid_id in KNOWN_YT_IDS:
+            if vid_id not in videos:
+                videos[vid_id] = {'id': vid_id, 'title': '', 'date': '', 'views': 0,
+                                  'url': f'https://www.youtube.com/watch?v={vid_id}'}
+        vlist = sorted(videos.values(), key=lambda x: x['date'], reverse=True)
+        return {'channel_url': channel_url, 'total_views': sum(v['views'] for v in vlist),
+                'video_count': len(vlist), 'videos': vlist}
     except Exception as e:
         print(f'YouTube error: {e}', file=sys.stderr)
-        # Fall back to known IDs with empty metadata
-        fallback = [{'id': vid_id, 'title': '', 'date': '', 'views': 0,
-                     'url': f'https://www.youtube.com/watch?v={vid_id}'}
-                    for vid_id in KNOWN_EPISODE_IDS]
-        return {'channel_url': channel_url, 'total_views': 0,
-                'video_count': len(fallback), 'videos': fallback,
-                'monthly': [], 'error': str(e)}
+        return {'channel_url': channel_url, 'total_views': 0, 'video_count': 0,
+                'videos': [], 'error': str(e)}
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
-
-def load_existing(path='data.json'):
+def _spotify_token():
+    global SPOTIFY_REFRESH_TOK
+    if not SPOTIFY_CLIENT_ID or not SPOTIFY_REFRESH_TOK:
+        return None
     try:
-        with open(path, encoding='utf-8') as f:
-            return json.load(f)
-    except Exception:
-        return {}
+        r = requests.post('https://accounts.spotify.com/api/token', data={
+            'grant_type': 'refresh_token', 'refresh_token': SPOTIFY_REFRESH_TOK,
+            'client_id': SPOTIFY_CLIENT_ID, 'client_secret': SPOTIFY_CLIENT_SEC,
+        }, timeout=20)
+        r.raise_for_status()
+        d = r.json()
+        if 'refresh_token' in d:
+            SPOTIFY_REFRESH_TOK = d['refresh_token']
+        return d.get('access_token')
+    except Exception as e:
+        print(f'Spotify token error: {e}', file=sys.stderr)
+        return None
+
+
+def fetch_spotify():
+    token = _spotify_token()
+    if not token:
+        return {'followers': 0, 'total_episodes': 0, 'episodes': [], 'error': 'no token'}
+    try:
+        r = requests.get(f'https://api.spotify.com/v1/shows/{SPOTIFY_SHOW_ID}?market=IL',
+                         headers={'Authorization': f'Bearer {token}'}, timeout=20)
+        r.raise_for_status()
+        show = r.json()
+        eps = [{'id': ep.get('id', ''), 'title': ep.get('name', ''),
+                'release_date': ep.get('release_date', ''),
+                'duration_ms': ep.get('duration_ms', 0)}
+               for ep in show.get('episodes', {}).get('items', [])[:20]]
+        return {'followers': show.get('followers', {}).get('total', 0),
+                'total_episodes': show.get('total_episodes', 0), 'episodes': eps}
+    except Exception as e:
+        print(f'Spotify show error: {e}', file=sys.stderr)
+        return {'followers': 0, 'total_episodes': 0, 'episodes': [], 'error': str(e)}
+
 
 def main():
-    print('⏳ Getting Spotify access token…')
-    sp_token = spotify_access_token()
+    print('Fetching Spreaker stats...')
+    spreaker = fetch_spreaker_stats()
+    print(f'  {spreaker["episode_count"]} episodes, '
+          f'{spreaker["total_downloads_all_time"]:,} all-time downloads, '
+          f'{spreaker["total_downloads_30d"]:,} last 30d, '
+          f'{len(spreaker["daily"])} daily points')
 
-    print('⏳ Fetching Spotify show data…')
-    spotify  = fetch_spotify(sp_token)
-    print(f'   followers: {spotify.get("followers")} | episodes: {spotify.get("total_episodes")}')
+    print('Fetching YouTube...')
+    youtube = fetch_youtube()
+    print(f'  {youtube["video_count"]} videos, {youtube["total_views"]:,} views')
 
-    print('⏳ Fetching Spreaker episodes…')
-    sp_eps     = fetch_spreaker_episodes()
-    total_audio = sum(ep['plays'] for ep in sp_eps)
-    print(f'   {len(sp_eps)} episodes · {total_audio:,} plays')
-
-    print(f'⏳ Fetching YouTube ({PODCAST_FILTER} only)…')
-    youtube = fetch_youtube_channel()
-    print(f'   {youtube["video_count"]} videos · {youtube["total_views"]:,} views')
-
-    existing = load_existing()
+    print('Fetching Spotify...')
+    spotify = fetch_spotify()
+    print(f'  {spotify["total_episodes"]} episodes, {spotify["followers"]:,} followers')
 
     data = {
         'updated': datetime.date.today().isoformat(),
-        'show': {
-            'name':             'יוצאים בשאלה',
-            'spreaker_show_id': SPREAKER_SHOW_ID,
-            'spotify_show_id':  SPOTIFY_SHOW_ID,
-            'youtube_channel':  f'https://www.youtube.com/{YOUTUBE_CHANNEL}',
-        },
+        'show': {'name': 'יוצאים בשאלה',
+                 'spreaker_show_id': SPREAKER_SHOW_ID},
         'audio': {
-            'total_plays':   total_audio,
-            'episode_count': len(sp_eps),
-            'episodes':      sp_eps,
-            'monthly':       compute_monthly(sp_eps),
+            'total_downloads_all_time': spreaker['total_downloads_all_time'],
+            'total_downloads_30d':      spreaker['total_downloads_30d'],
+            'episode_count':            spreaker['episode_count'],
+            'daily':                    spreaker['daily'],
+            'episodes':                 spreaker['episodes'],
         },
-        'video': {
-            'youtube':       youtube,
-            'spotify_video': existing.get('video', {}).get('spotify_video', {
-                'total_plays': 0, 'episodes': [],
-            }),
-        },
-        'spotify': {
-            'followers':      spotify.get('followers', 0),
-            'total_episodes': spotify.get('total_episodes', 0),
-            'episodes':       spotify.get('episodes', []),
-        },
+        'video': {'youtube': youtube},
+        'spotify': spotify,
     }
 
-    out = os.path.join(os.path.dirname(__file__), '..', 'data.json')
-    with open(out, 'w', encoding='utf-8') as f:
+    out_path = os.path.join(os.path.dirname(__file__), '..', 'data.json')
+    with open(out_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    print(f'✅ data.json written')
+    print('data.json written')
+
 
 if __name__ == '__main__':
     main()
