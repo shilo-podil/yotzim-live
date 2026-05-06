@@ -27,7 +27,7 @@ jobs:
         run: python scripts/fetch_data.py
         env:
           SPREAKER_SHOW_ID: '4956945'
-          YOUTUBE_CHANNEL: '@mediahillel'
+          YOUTUBE_CHANNEL: '@hillel-il'
 
       - name: Commit and push
         run: |
