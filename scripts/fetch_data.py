@@ -89,7 +89,7 @@ def fetch_spotify(token):
 def fetch_spreaker_episodes():
     episodes = []
     url = (f'https://api.spreaker.com/v2/shows/{SPREAKER_SHOW_ID}'
-           f'/episodes?limit=100&filter=listenable')
+           f'/episodes?limit=100')
     page = 0
     while url:
         try:
@@ -127,6 +127,9 @@ def compute_monthly(items, key='plays'):
 
 # ── YouTube ───────────────────────────────────────────────────────────────────
 
+# Known podcast episode IDs — always included regardless of channel scan
+KNOWN_EPISODE_IDS = ['xbq8AYlRHc4']
+
 def fetch_video_meta(video_id):
     """Fetch full metadata for a single video to get accurate view count."""
     try:
@@ -141,16 +144,15 @@ def fetch_video_meta(video_id):
     return {}
 
 def fetch_youtube_channel():
-    """Step 1: flat-playlist to find podcast episode IDs.
+    """Step 1: flat-playlist to discover podcast episode IDs.
        Step 2: full metadata fetch per episode for accurate view counts."""
     channel_url = f'https://www.youtube.com/{YOUTUBE_CHANNEL}'
-    # Strict filter — only actual podcast episodes whose titles end with the show tag
-    strict_filter = 'פודקאסט הלל יוצאים בשאלה'
     try:
         result = subprocess.run(
             ['yt-dlp', '--flat-playlist', '--dump-json', '--quiet', channel_url],
             capture_output=True, text=True, timeout=180)
-        matched_ids = []
+
+        discovered_ids = set(KNOWN_EPISODE_IDS)
         for line in result.stdout.strip().split('\n'):
             line = line.strip()
             if not line:
@@ -159,14 +161,17 @@ def fetch_youtube_channel():
                 v = json.loads(line)
                 title = v.get('title') or ''
                 vid_type = v.get('_type', '')
-                if strict_filter in title and v.get('id') and vid_type != 'playlist':
-                    matched_ids.append(v.get('id'))
+                vid_id   = v.get('id', '')
+                # Episode: must mention the show AND "פודקאסט" (podcast tag in title)
+                if (PODCAST_FILTER in title and 'פודקאסט' in title
+                        and vid_id and vid_type != 'playlist'):
+                    discovered_ids.add(vid_id)
             except Exception:
                 continue
 
-        print(f'   Found {len(matched_ids)} podcast episode IDs — fetching full metadata…')
+        print(f'   Found {len(discovered_ids)} episode IDs — fetching metadata…')
         videos = []
-        for vid_id in matched_ids:
+        for vid_id in discovered_ids:
             meta = fetch_video_meta(vid_id)
             if not meta:
                 continue
