@@ -323,6 +323,8 @@ function render(d) {
   const yt = d.video?.youtube || {};
   const sv = d.video?.spotify_video || {};
   const au = d.audio || {};
+  const sp = d.spotify || {};
+  const spEps = (sp.episodes || []).sort((a,b) => new Date(b.release_date) - new Date(a.release_date));
   const ytVideos = (yt.videos || []);
   const auEps    = (au.episodes || []).sort((a,b) => (b.plays||0)-(a.plays||0));
 
@@ -410,7 +412,41 @@ function render(d) {
     <div id="audio-tab"></div>`;
   }
 
-  // ── Spotify Video section ─────────────────────────────────────────────────
+  // ── Spotify Podcast section ──────────────────────────────────────────────────
+  if ((sp.followers !== undefined) || (sp.total_episodes > 0)) {
+    html += `
+    <div class="sec-hdr">
+      <div class="icon" style="background:#e8f5e9">🎙️</div>
+      <div>
+        <h2>Spotify Podcast</h2>
+        <div class="sec-sub">נתוני הפודקאסט ב‑Spotify · <a href="https://open.spotify.com/show/5UZLdyA62VDlfnyk51CgBH" target="_blank" style="color:#1DB954">האזן ב‑Spotify</a></div>
+      </div>
+    </div>
+    <div class="cards">
+      ${card('עוקבים', fmtK(sp.followers||0), 'עוקבי הפודקאסט', 'green', '🎙️')}
+      ${card('פרקים ב‑Spotify', fmt(sp.total_episodes||0), 'פרקים זמינים', 'purple', '📱')}
+    </div>`;
+
+    if (spEps.length > 0) {
+      const maxDur = Math.max(...spEps.map(e => e.duration_ms||0)) || 1;
+      const rows = spEps.slice(0,20).map((ep, i) => {
+        const mins = Math.round((ep.duration_ms||0)/60000);
+        const pct = ((ep.duration_ms||0)/maxDur*100).toFixed(1);
+        return `<tr>
+          <td class="rank">${i+1}</td>
+          <td class="title-cell"><a href="${ep.url||'#'}" target="_blank" rel="noopener">${ep.name||'—'}</a><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:#1DB954"></div></div></td>
+          <td class="date">${ep.release_date||''}</td>
+          <td class="num">${mins} דק'</td>
+        </tr>`;
+      }).join('');
+      html += `<div class="tbl-wrap">
+        <div class="tbl-hdr"><span>פרקי Spotify</span><span class="tbl-count">${spEps.length} פרקים</span></div>
+        <table><thead><tr><th>#</th><th>כותרת</th><th>תאריך</th><th>אורך</th></tr></thead><tbody>${rows}</tbody></table>
+      </div>`;
+    }
+  }
+
+    // ── Spotify Video section ─────────────────────────────────────────────────
   if ((sv.total_plays||0) > 0 || (sv.episodes||[]).length > 0) {
     html += `
     <div class="sec-hdr">
