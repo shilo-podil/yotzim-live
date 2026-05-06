@@ -410,87 +410,9 @@
   "video": {
     "youtube": {
       "channel_url": "https://www.youtube.com/@hillel-il",
-      "total_views": 1414,
-      "video_count": 11,
-      "videos": [
-        {
-          "id": "xbq8AYlRHc4",
-          "title": "זה לא גבורה זו הישרדות, שרה קופ | פודקאסט הלל יוצאים בשאלה",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=xbq8AYlRHc4"
-        },
-        {
-          "id": "ZPxqfo3Rv0g",
-          "title": "סרטון למימון המונים להקמת בית ליוצאים בשאלה",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=ZPxqfo3Rv0g"
-        },
-        {
-          "id": "6voTbPELMik",
-          "title": "מושקא קורקוס - משתתפת בסדרה \"סליחה על השאלה\" כאן 11 | בפרק על יוצאים בשאלה מהמגזר החרדי",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=6voTbPELMik"
-        },
-        {
-          "id": "Nc36BIskp1U",
-          "title": "שיפוץ דירות המעבר של הלל – יוצאים בשאלה",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=Nc36BIskp1U"
-        },
-        {
-          "id": "-Mu0PXt0RZk",
-          "title": "ראיון עם מנכ\"ל עמותת הלל- מר יאיר הס ב\"כאן 11\" בנושא שילוב יוצאים בשאלה בחברה הישראלית.",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=-Mu0PXt0RZk"
-        },
-        {
-          "id": "geDbW6Zurik",
-          "title": "הוקמה בכנסת שדולה שתנסה לסייע ליוצאים בשאלה, שיחת היום, רשת 13",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=geDbW6Zurik"
-        },
-        {
-          "id": "ECl3TgnDOY8",
-          "title": "גל גבאי בתכנית המקור: \"ליוצאים בשאלה יש רק עמותה אחת שעוזרת להם\"",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=ECl3TgnDOY8"
-        },
-        {
-          "id": "qKyH6aVCc4M",
-          "title": "סרטון למימון המונים להקמת בית ליוצאים בשאלה עם כתוביות בעברית",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=qKyH6aVCc4M"
-        },
-        {
-          "id": "_F5oi1aE23Q",
-          "title": "עליה ביוצאים בשאלה בקרב צעירים / מתוך עולם הבוקר רשת 13",
-          "date": "",
-          "views": 0,
-          "url": "https://www.youtube.com/watch?v=_F5oi1aE23Q"
-        },
-        {
-          "id": "RZOtO5YXcZg",
-          "title": "הסיפור של אסתי | הלל יוצאים בשאלה",
-          "date": "",
-          "views": 543,
-          "url": "https://www.youtube.com/watch?v=RZOtO5YXcZg"
-        },
-        {
-          "id": "-JX-IIXOS8I",
-          "title": "המסע של מתן - הלל יוצאים בשאלה",
-          "date": "",
-          "views": 871,
-          "url": "https://www.youtube.com/watch?v=-JX-IIXOS8I"
-        }
-      ],
+      "total_views": 0,
+      "video_count": 0,
+      "videos": [],
       "monthly": []
     },
     "spotify_video": {
