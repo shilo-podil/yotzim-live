@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Spotify Auth Callback</title>
+<style>body{font-family:monospace;padding:40px;background:#f5f6fa}pre{background:#fff;padding:20px;border-radius:8px;border:1px solid #ddd;word-break:break-all}</style>
+</head>
+<body>
+<h2>Spotify Authorization Code</h2>
+<pre id="out">Reading...</pre>
+<script>
+const p = new URLSearchParams(window.location.search);
+const code = p.get('code');
+const error = p.get('error');
+document.getElementById('out').textContent = code
+  ? 'CODE:\n' + code
+  : 'ERROR: ' + error;
+</script>
+</body>
+</html>
