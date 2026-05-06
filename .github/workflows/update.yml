@@ -28,6 +28,9 @@ jobs:
         env:
           SPREAKER_SHOW_ID: '4956945'
           YOUTUBE_CHANNEL: '@hillel-il'
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
 
       - name: Commit and push
         run: |
