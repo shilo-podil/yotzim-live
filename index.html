@@ -254,10 +254,6 @@
 <script>
 const PASSWORD = 'iritirit';
 
-function togglePw() {
-  const inp = document.getElementById('pw-input');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-}
 function checkPassword() {
   if (document.getElementById('pw-input').value === PASSWORD) {
     document.getElementById('pw-overlay').style.display = 'none';
@@ -327,8 +323,6 @@ function render(d) {
   const yt = d.video?.youtube || {};
   const sv = d.video?.spotify_video || {};
   const au = d.audio || {};
-  const sp = d.spotify || {};
-  const spEps = (sp.episodes || []).sort((a,b) => new Date(b.release_date) - new Date(a.release_date));
   const ytVideos = (yt.videos || []);
   const auEps    = (au.episodes || []).sort((a,b) => (b.plays||0)-(a.plays||0));
 
@@ -348,7 +342,7 @@ function render(d) {
 
   html += `<div class="cards">
     ${card('סה"כ צפיות', fmtK(yt.total_views||0), `${fmt(yt.video_count||0)} פרקים פורסמו`, 'red', '👁️')}
-    ${card('פרק ראשון', ytVideos.length ? fmtDate(ytVideos[0].date)||'ראה בYouTube' : '—', ytVideos.length ? ytVideos[0].title?.substring(0,30)||ytVideos[0].id : 'טרם פורסם', 'purple', '🎬')}
+    ${card('פרק ראשון', ytVideos.length ? fmtK(ytVideos[0].views)+' צפיות' : '—', ytVideos.length ? fmtDate(ytVideos[0].date) : 'טרם פורסם', 'purple', '🎬')}
   </div>`;
 
   if (ytVideos.length > 0) {
@@ -358,11 +352,11 @@ function render(d) {
         <img class="ep-thumb" src="${thumb}" alt="${ep.title}" onerror="this.style.display='none'">
         <div class="ep-body">
           <span class="ep-badge">פרק וידאו</span>
-          <div class="ep-title"><a href="${ep.url}" target="_blank" rel="noopener">${ep.title || ep.url}</a></div>
+          <div class="ep-title"><a href="${ep.url}" target="_blank" rel="noopener">${ep.title}</a></div>
           <div class="ep-date">📅 ${fmtDate(ep.date)}</div>
           <div class="ep-stats">
             <div class="ep-stat">
-              <div class="es-val">${ep.views > 0 ? fmt(ep.views) : "—"}</div>
+              <div class="es-val">${fmt(ep.views)}</div>
               <div class="es-lbl">צפיות יוטיוב</div>
             </div>
           </div>
@@ -403,54 +397,20 @@ function render(d) {
     </div>`;
   } else {
     html += `<div class="cards">
-      ${card('סה"כ האזנות', fmtK(au.total_plays||0), 'כל הפלטפורמות', 'purple', '🎧')}
+      ${card('סה"כ האזנות', fmtK(au.total_downloads_all_time||0), 'כל הפלטפורמות', 'purple', '🎧')}
       ${card('מספר פרקים', fmt(au.episode_count||0), 'פרקים שפורסמו', 'green', '📋')}
-      ${card('ממוצע לפרק', fmtK(au.episode_count ? Math.round((au.total_plays||0)/au.episode_count) : 0), 'האזנות', 'yellow', '📊')}
-      ${card('חודש אחרון', fmtK((au.monthly||[]).slice(-1)[0]?.plays||0), (au.monthly||[]).slice(-1)[0]?.month||'', 'red', '📅')}
+      ${card('ממוצע לפרק', fmtK(au.episode_count ? Math.round((au.total_downloads_all_time||0)/au.episode_count) : 0), 'האזנות', 'yellow', '📊')}
+      ${card('30 יום אחרון', fmtK(au.total_downloads_30d||0), 'הורדות', 'red', '📅')}
     </div>
 
     <div class="tab-row">
-      <button class="tab-btn ${audioTab==='chart'?'active':''}" onclick="switchTab('audio','chart')">📈 גרף חודשי</button>
+      <button class="tab-btn ${audioTab==='chart'?'active':''}" onclick="switchTab('audio','chart')">📈 גרף יומי (30 יום)</button>
       <button class="tab-btn ${audioTab==='table'?'active':''}" onclick="switchTab('audio','table')">📋 טבלת פרקים</button>
     </div>
     <div id="audio-tab"></div>`;
   }
 
-  // ── Spotify Podcast section ──────────────────────────────────────────────────
-  if ((sp.followers !== undefined) || (sp.total_episodes > 0)) {
-    html += `
-    <div class="sec-hdr">
-      <div class="icon" style="background:#e8f5e9">🎙️</div>
-      <div>
-        <h2>Spotify Podcast</h2>
-        <div class="sec-sub">נתוני הפודקאסט ב‑Spotify · <a href="https://open.spotify.com/show/5UZLdyA62VDlfnyk51CgBH" target="_blank" style="color:#1DB954">האזן ב‑Spotify</a></div>
-      </div>
-    </div>
-    <div class="cards">
-      ${card('עוקבים', fmtK(sp.followers||0), 'עוקבי הפודקאסט', 'green', '🎙️')}
-      ${card('פרקים ב‑Spotify', fmt(sp.total_episodes||0), 'פרקים זמינים', 'purple', '📱')}
-    </div>`;
-
-    if (spEps.length > 0) {
-      const maxDur = Math.max(...spEps.map(e => e.duration_ms||0)) || 1;
-      const rows = spEps.slice(0,20).map((ep, i) => {
-        const mins = Math.round((ep.duration_ms||0)/60000);
-        const pct = ((ep.duration_ms||0)/maxDur*100).toFixed(1);
-        return `<tr>
-          <td class="rank">${i+1}</td>
-          <td class="title-cell"><a href="${ep.url||'#'}" target="_blank" rel="noopener">${ep.name||'—'}</a><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:#1DB954"></div></div></td>
-          <td class="date">${ep.release_date||''}</td>
-          <td class="num">${mins} דק'</td>
-        </tr>`;
-      }).join('');
-      html += `<div class="tbl-wrap">
-        <div class="tbl-hdr"><span>פרקי Spotify</span><span class="tbl-count">${spEps.length} פרקים</span></div>
-        <table><thead><tr><th>#</th><th>כותרת</th><th>תאריך</th><th>אורך</th></tr></thead><tbody>${rows}</tbody></table>
-      </div>`;
-    }
-  }
-
-    // ── Spotify Video section ─────────────────────────────────────────────────
+  // ── Spotify Video section ─────────────────────────────────────────────────
   if ((sv.total_plays||0) > 0 || (sv.episodes||[]).length > 0) {
     html += `
     <div class="sec-hdr">
@@ -479,10 +439,10 @@ function renderAudioTab() {
   const eps = (au.episodes||[]).sort((a,b)=>(b.plays||0)-(a.plays||0));
 
   if (audioTab === 'chart') {
-    const monthly = au.monthly || [];
-    if (monthly.length === 0) { el.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><h3>אין נתוני גרף עדיין</h3></div>'; return; }
-    el.innerHTML = `<div class="chart-wrap"><div class="ch-hdr"><div class="ch-title">האזנות לפי חודש</div><div class="ch-sub">כל הפלטפורמות</div></div><canvas id="audio-chart"></canvas></div>`;
-    renderBarChart('audio-chart', monthly.map(m=>m.month), monthly.map(m=>m.plays), '#5b4fe9');
+    const daily = au.daily || [];
+    if (daily.length === 0) { el.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><h3>אין נתוני גרף עדיין</h3></div>'; return; }
+    el.innerHTML = `<div class="chart-wrap"><div class="ch-hdr"><div class="ch-title">הורדות יומיות (30 יום אחרון)</div><div class="ch-sub">כל הפלטפורמות · Spreaker</div></div><canvas id="audio-chart"></canvas></div>`;
+    renderBarChart('audio-chart', daily.map(d=>d.date.slice(5)), daily.map(d=>d.downloads), '#5b4fe9');
   } else {
     if (!eps.length) { el.innerHTML = '<div class="empty-state"><div class="es-icon">📋</div><h3>אין פרקים עדיין</h3></div>'; return; }
     const max = Math.max(...eps.map(e=>e.plays||0)) || 1;
@@ -496,8 +456,8 @@ function renderAudioTab() {
       </tr>`;
     }).join('');
     el.innerHTML = `<div class="tbl-wrap">
-      <div class="tbl-hdr"><span>פרקים לפי האזנות</span><span class="tbl-count">${eps.length} פרקים</span></div>
-      <table><thead><tr><th>#</th><th>כותרת</th><th>תאריך</th><th>האזנות</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="tbl-hdr"><span>פרקים לפי הורדות (30 יום)</span><span class="tbl-count">${eps.length} פרקים</span></div>
+      <table><thead><tr><th>#</th><th>כותרת</th><th>תאריך</th><th>הורדות (30י)</th></tr></thead><tbody>${rows}</tbody></table>
     </div>`;
   }
 }
@@ -521,9 +481,4 @@ function loadData() {
     .then(d => render(d))
     .catch(e => {
       document.getElementById('content').innerHTML =
-        `<div class="empty-state"><div class="es-icon">❌</div><h3>שגיאה בטעינת נתונים</h3><p>${e}</p></div>`;
-    });
-}
-</script>
-</body>
-</html>
+        `<div class="empty-state"><div class="es-icon">❌</div><h3>שגיאה בטעינת נתונים</h3><p>${e

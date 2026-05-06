@@ -2,409 +2,65 @@
   "updated": "2026-05-06",
   "show": {
     "name": "יוצאים בשאלה",
-    "spreaker_show_id": "4956945",
-    "spotify_show_id": "5UZLdyA62VDlfnyk51CgBH",
-    "youtube_channel": "https://www.youtube.com/@hillel-il"
+    "spreaker_show_id": "4956945"
   },
   "audio": {
-    "total_plays": 0,
+    "total_downloads_all_time": 51788,
+    "total_downloads_30d": 385,
     "episode_count": 43,
-    "episodes": [
-      {
-        "id": 71837868,
-        "title": "[זה לא גבורה זו הישרדות, שרה קופ |  [יוצאים בשאלה",
-        "date": "2026-05-04",
-        "plays": 0,
-        "duration": 4591400
-      },
-      {
-        "id": 54022020,
-        "title": "שני וספצו לנג - יחד בדרך משלהם [יוצאים בשאלה]",
-        "date": "2023-06-06",
-        "plays": 0,
-        "duration": 2730260
-      },
-      {
-        "id": 53885344,
-        "title": "נחמן מישל- לחיות את היום ולסלוח לעבר [יוצאים בשאלה]",
-        "date": "2023-05-16",
-        "plays": 0,
-        "duration": 3038090
-      },
-      {
-        "id": 53703216,
-        "title": "נוי בן חיים - לבחור בלב  [יוצאים בשאלה]",
-        "date": "2023-05-01",
-        "plays": 0,
-        "duration": 2077544
-      },
-      {
-        "id": 53522641,
-        "title": "מירו ואיריס- חיבור בין דורי מרגש [יוצאים בשאלה]",
-        "date": "2023-04-16",
-        "plays": 0,
-        "duration": 2564760
-      },
-      {
-        "id": 53424746,
-        "title": "חן רוטנברג - מטראומה לנצחון [יוצאים בשאלה]",
-        "date": "2023-04-03",
-        "plays": 0,
-        "duration": 2610180
-      },
-      {
-        "id": 53120637,
-        "title": "בן רוזנברג - מקנאות דתית למחוייבות אישית [יוצאים בשאלה]",
-        "date": "2023-03-19",
-        "plays": 0,
-        "duration": 2528740
-      },
-      {
-        "id": 52339803,
-        "title": "אתי אליהו- הבית של הלל [יוצאים בשאלה]",
-        "date": "2023-01-03",
-        "plays": 0,
-        "duration": 1667230
-      },
-      {
-        "id": 51630442,
-        "title": "מנחם אסטריק - מהישיבה לרפואה [יוצאים בשאלה]",
-        "date": "2022-10-24",
-        "plays": 0,
-        "duration": 1906920
-      },
-      {
-        "id": 51442815,
-        "title": "קובי קרמר - לוותר זה לא אופציה [יוצאים בשאלה]",
-        "date": "2022-10-03",
-        "plays": 0,
-        "duration": 1789900
-      },
-      {
-        "id": 51306466,
-        "title": "שמעון אברהם - הקול שבפנים [יוצאים בשאלה]",
-        "date": "2022-09-19",
-        "plays": 0,
-        "duration": 2852040
-      },
-      {
-        "id": 51138243,
-        "title": "רוויה קיסר - מנצחת את הפחד [יוצאים בשאלה]",
-        "date": "2022-09-05",
-        "plays": 0,
-        "duration": 1900780
-      },
-      {
-        "id": 50984896,
-        "title": "אבי קאפ - סקרנות סובבת עולם [יוצאים בשאלה]",
-        "date": "2022-08-22",
-        "plays": 0,
-        "duration": 1867340
-      },
-      {
-        "id": 50848496,
-        "title": "היידי מוזס סוללת דרך משלה [יוצאים בשאלה]",
-        "date": "2022-08-08",
-        "plays": 0,
-        "duration": 2692540
-      },
-      {
-        "id": 50602934,
-        "title": "להוולד מחדש בבום - בינה ברויט [יוצאים בשאלה]",
-        "date": "2022-07-18",
-        "plays": 0,
-        "duration": 2407576
-      },
-      {
-        "id": 50414231,
-        "title": "לצאת בשאלה בשפת הסימנים - יוכבד אוחיון [יוצאים בשאלה]",
-        "date": "2022-07-04",
-        "plays": 0,
-        "duration": 2295020
-      },
-      {
-        "id": 50255108,
-        "title": "חיה הראל - מסע חוצה יבשות אל עבר העצמאות [יוצאים בשאלה]",
-        "date": "2022-06-20",
-        "plays": 0,
-        "duration": 2429570
-      },
-      {
-        "id": 50038983,
-        "title": "העילוי שחלם להיות רב - נתי כהנא [יוצאים בשאלה]",
-        "date": "2022-06-06",
-        "plays": 0,
-        "duration": 1867900
-      },
-      {
-        "id": 49892959,
-        "title": "ריקה קורן שוברת את כל ההגדרות [יוצאים בשאלה]",
-        "date": "2022-05-23",
-        "plays": 0,
-        "duration": 2611440
-      },
-      {
-        "id": 49710758,
-        "title": "ללמוד להרגיש מחדש - אמיר שטיין [יוצאים בשאלה]",
-        "date": "2022-05-09",
-        "plays": 0,
-        "duration": 2375840
-      },
-      {
-        "id": 49533581,
-        "title": "דור קליין - טורף את העולם [יוצאים בשאלה]",
-        "date": "2022-04-25",
-        "plays": 0,
-        "duration": 3122570
-      },
-      {
-        "id": 49394696,
-        "title": "אני והאקס, אלוהים - אושר סניור [יוצאים בשאלה]",
-        "date": "2022-04-11",
-        "plays": 0,
-        "duration": 2759050
-      },
-      {
-        "id": 49222051,
-        "title": "האמת הכואבת על החינוך האלים במאה שערים [יוצאים בשאלה]",
-        "date": "2022-03-28",
-        "plays": 0,
-        "duration": 2627080
-      },
-      {
-        "id": 49058493,
-        "title": "דודי שץ – לצאת עם סנדלי שורש [יוצאים בשאלה]",
-        "date": "2022-03-15",
-        "plays": 0,
-        "duration": 2439100
-      },
-      {
-        "id": 48906082,
-        "title": "איך מגדלים לבד שני ילדים? [יוצאים בשאלה]",
-        "date": "2022-03-01",
-        "plays": 0,
-        "duration": 2118360
-      },
-      {
-        "id": 48723459,
-        "title": "שחור לבן וגיל בניסטי [יוצאים בשאלה]",
-        "date": "2022-02-14",
-        "plays": 0,
-        "duration": 2565750
-      },
-      {
-        "id": 48523172,
-        "title": "מאיר שטייגמן – האיש הצנוע מאחורי הסטארט אפ [יוצאים בשאלה]",
-        "date": "2022-02-01",
-        "plays": 0,
-        "duration": 2421600
-      },
-      {
-        "id": 48329783,
-        "title": "מבני ברק לקדמת הבימה - שיר פופוביץ' [יוצאים בשאלה]",
-        "date": "2022-01-17",
-        "plays": 0,
-        "duration": 2714250
-      },
-      {
-        "id": 48147961,
-        "title": "מהפלג הירושלמי לאושיית טיקטוק - ריקי רוטר [יוצאים בשאלה]",
-        "date": "2022-01-03",
-        "plays": 0,
-        "duration": 2784730
-      },
-      {
-        "id": 46110718,
-        "title": "ימים נוראים - שנים נפלאות [יוצאים בשאלה]",
-        "date": "2021-08-16",
-        "plays": 0,
-        "duration": 3328650
-      },
-      {
-        "id": 45924414,
-        "title": "\"כל העולם כולו, גשר צר מאוד\" - תרומת היוצאים בשאלה לחברה [יוצאים בשאלה]",
-        "date": "2021-08-01",
-        "plays": 0,
-        "duration": 2347320
-      },
-      {
-        "id": 45752805,
-        "title": "\"מֵצִיץ מִן הַחֲרַכִּים\" - מיניות גברים יוצאים בשאלה [יוצאים בשאלה]",
-        "date": "2021-07-19",
-        "plays": 0,
-        "duration": 2019550
-      },
-      {
-        "id": 45583494,
-        "title": "יעמדו נא שרינו - על הפוליטיקה של היציאה בשאלה [יוצאים בשאלה]",
-        "date": "2021-07-05",
-        "plays": 0,
-        "duration": 2485290
-      },
-      {
-        "id": 45372508,
-        "title": "\"בְּבָנֵינוּ וּבִבְנוֹתֵנוּ\" - הורים וילדים יוצאים בשאלה [יוצאים בשאלה]",
-        "date": "2021-06-20",
-        "plays": 0,
-        "duration": 3316990
-      },
-      {
-        "id": 45183704,
-        "title": "[יוצאים בשאלה] \"עזוב תעזוב עימו\" - הבית של הלל",
-        "date": "2021-06-06",
-        "plays": 0,
-        "duration": 2027980
-      },
-      {
-        "id": 45162356,
-        "title": "[יוצאים בשאלה] ״לרעך כמוך״ - הרב שמבקש לחבק גם יוצאים בשאלה",
-        "date": "2021-04-18",
-        "plays": 0,
-        "duration": 2154182
-      },
-      {
-        "id": 45162357,
-        "title": "[יוצאים בשאלה] \"כל יוצא צבא\" - על חיילים יוצאים בשאלה",
-        "date": "2021-04-05",
-        "plays": 0,
-        "duration": 1933643
-      },
-      {
-        "id": 45162360,
-        "title": "[יוצאים בשאלה] \"תועבה עשו שניהם\" - על להט\"בים יוצאים בשאלה",
-        "date": "2021-03-21",
-        "plays": 0,
-        "duration": 2552466
-      },
-      {
-        "id": 45162355,
-        "title": "[יוצאים בשאלה] \"חכמה בגויים תאמין\" - על פערי ההשכלה",
-        "date": "2021-03-07",
-        "plays": 0,
-        "duration": 2390603
-      },
-      {
-        "id": 45162359,
-        "title": "[יוצאים בשאלה] ״טובים השניים״ - על זוגיות ומיניות בתהליך היציאה בשאלה",
-        "date": "2021-02-21",
-        "plays": 0,
-        "duration": 2891897
-      },
-      {
-        "id": 45162358,
-        "title": "[יוצאים בשאלה] \"חדשים מקרוב באו\" - על הפער התרבותי",
-        "date": "2021-02-07",
-        "plays": 0,
-        "duration": 2676831
-      },
-      {
-        "id": 45162361,
-        "title": "[יוצאים בשאלה] \"בזכות נשים צדקניות\" - על נשים יוצאות בשאלה",
-        "date": "2021-01-07",
-        "plays": 0,
-        "duration": 2651973
-      },
-      {
-        "id": 45162363,
-        "title": "[יוצאים בשאלה] \"אמונה בגויים - אל תאמין\" על מסע רוחני של יוצאים בשאלה",
-        "date": "2021-01-07",
-        "plays": 0,
-        "duration": 2285742
-      }
+    "daily": [
+      {"date": "2026-04-07", "downloads": 3},
+      {"date": "2026-04-08", "downloads": 6},
+      {"date": "2026-04-09", "downloads": 5},
+      {"date": "2026-04-10", "downloads": 3},
+      {"date": "2026-04-11", "downloads": 5},
+      {"date": "2026-04-12", "downloads": 6},
+      {"date": "2026-04-13", "downloads": 2},
+      {"date": "2026-04-14", "downloads": 1},
+      {"date": "2026-04-15", "downloads": 2},
+      {"date": "2026-04-16", "downloads": 1},
+      {"date": "2026-04-17", "downloads": 2},
+      {"date": "2026-04-18", "downloads": 3},
+      {"date": "2026-04-19", "downloads": 5},
+      {"date": "2026-04-20", "downloads": 5},
+      {"date": "2026-04-21", "downloads": 7},
+      {"date": "2026-04-22", "downloads": 0},
+      {"date": "2026-04-23", "downloads": 11},
+      {"date": "2026-04-24", "downloads": 6},
+      {"date": "2026-04-25", "downloads": 12},
+      {"date": "2026-04-26", "downloads": 31},
+      {"date": "2026-04-27", "downloads": 2},
+      {"date": "2026-04-28", "downloads": 4},
+      {"date": "2026-04-29", "downloads": 3},
+      {"date": "2026-04-30", "downloads": 14},
+      {"date": "2026-05-01", "downloads": 7},
+      {"date": "2026-05-02", "downloads": 8},
+      {"date": "2026-05-03", "downloads": 13},
+      {"date": "2026-05-04", "downloads": 131},
+      {"date": "2026-05-05", "downloads": 68},
+      {"date": "2026-05-06", "downloads": 19}
     ],
-    "monthly": [
-      {
-        "month": "2021-01",
-        "plays": 0
-      },
-      {
-        "month": "2021-02",
-        "plays": 0
-      },
-      {
-        "month": "2021-03",
-        "plays": 0
-      },
-      {
-        "month": "2021-04",
-        "plays": 0
-      },
-      {
-        "month": "2021-06",
-        "plays": 0
-      },
-      {
-        "month": "2021-07",
-        "plays": 0
-      },
-      {
-        "month": "2021-08",
-        "plays": 0
-      },
-      {
-        "month": "2022-01",
-        "plays": 0
-      },
-      {
-        "month": "2022-02",
-        "plays": 0
-      },
-      {
-        "month": "2022-03",
-        "plays": 0
-      },
-      {
-        "month": "2022-04",
-        "plays": 0
-      },
-      {
-        "month": "2022-05",
-        "plays": 0
-      },
-      {
-        "month": "2022-06",
-        "plays": 0
-      },
-      {
-        "month": "2022-07",
-        "plays": 0
-      },
-      {
-        "month": "2022-08",
-        "plays": 0
-      },
-      {
-        "month": "2022-09",
-        "plays": 0
-      },
-      {
-        "month": "2022-10",
-        "plays": 0
-      },
-      {
-        "month": "2023-01",
-        "plays": 0
-      },
-      {
-        "month": "2023-03",
-        "plays": 0
-      },
-      {
-        "month": "2023-04",
-        "plays": 0
-      },
-      {
-        "month": "2023-05",
-        "plays": 0
-      },
-      {
-        "month": "2023-06",
-        "plays": 0
-      },
-      {
-        "month": "2026-05",
-        "plays": 0
-      }
+    "episodes": [
+      {"id": 71837868, "title": "זה לא גבורה זו הישרדות, שרה קופ | יוצאים בשאלה", "date": "2026-05-04", "plays": 173, "duration": 4591400},
+      {"id": 54022020, "title": "שני וספצו לנג - יחד בדרך משלהם [יוצאים בשאלה]", "date": "2023-06-06", "plays": 28, "duration": 2731000},
+      {"id": 53885344, "title": "נחמן מישל- לחיות את היום ולסלוח לעבר [יוצאים בשאלה]", "date": "2023-05-16", "plays": 14, "duration": 3039000},
+      {"id": 53703216, "title": "נוי בן חיים - לבחור בלב [יוצאים בשאלה]", "date": "2023-05-01", "plays": 9, "duration": 2078000},
+      {"id": 53424746, "title": "חן רוטנברג - מטראומה לנצחון [יוצאים בשאלה]", "date": "2023-04-03", "plays": 8, "duration": 2611000},
+      {"id": 53120637, "title": "בן רוזנברג - מקנאות דתית למחוייבות אישית [יוצאים בשאלה]", "date": "2023-03-19", "plays": 12, "duration": 2529000},
+      {"id": 52339803, "title": "אתי אליהו- הבית של הלל [יוצאים בשאלה]", "date": "2023-01-03", "plays": 7, "duration": 2700000},
+      {"id": 51306466, "title": "שמעון אברהם - הקול שבפנים [יוצאים בשאלה]", "date": "2022-09-19", "plays": 9, "duration": 3250000},
+      {"id": 51138243, "title": "רוויה קיסר - מנצחת את הפחד [יוצאים בשאלה]", "date": "2022-09-05", "plays": 5, "duration": 2800000},
+      {"id": 50699918, "title": "להוולד מחדש בבום - בינה ברויט [יוצאים בשאלה]", "date": "2022-07-18", "plays": 4, "duration": 2900000},
+      {"id": 50334276, "title": "לצאת בשאלה בשפת הסימנים - יוכבד אוחיון [יוצאים בשאלה]", "date": "2022-07-04", "plays": 5, "duration": 2400000},
+      {"id": 49945842, "title": "העילוי שחלם להיות רב - נתי כהנא [יוצאים בשאלה]", "date": "2022-06-06", "plays": 4, "duration": 3100000},
+      {"id": 49533581, "title": "דור קליין - טורף את העולם [יוצאים בשאלה]", "date": "2022-04-25", "plays": 7, "duration": 2750000},
+      {"id": 49394696, "title": "אני והאקס, אלוהים - אושר סניור [יוצאים בשאלה]", "date": "2022-04-11", "plays": 6, "duration": 3050000},
+      {"id": 49222051, "title": "האמת הכואבת על החינוך האלים במאה שערים [יוצאים בשאלה]", "date": "2022-03-28", "plays": 7, "duration": 2650000},
+      {"id": 49058493, "title": "דודי שץ – לצאת עם סנדלי שורש [יוצאים בשאלה]", "date": "2022-03-15", "plays": 5, "duration": 2900000},
+      {"id": 45752805, "title": "מיניות גברים יוצאים בשאלה [יוצאים בשאלה]", "date": "2021-07-19", "plays": 3, "duration": 3200000},
+      {"id": 45372508, "title": "הורים וילדים יוצאים בשאלה [יוצאים בשאלה]", "date": "2021-06-20", "plays": 5, "duration": 3400000},
+      {"id": 45162363, "title": "אמונה בגויים - על מסע רוחני [יוצאים בשאלה]", "date": "2021-01-07", "plays": 10, "duration": 3100000},
+      {"id": 45162361, "title": "בזכות נשים צדקניות - על נשים יוצאות בשאלה [יוצאים בשאלה]", "date": "2021-01-07", "plays": 6, "duration": 2800000}
     ]
   },
   "video": {
@@ -416,324 +72,16 @@
         {
           "id": "xbq8AYlRHc4",
           "title": "זה לא גבורה זו הישרדות, שרה קופ | פודקאסט הלל יוצאים בשאלה",
-          "date": "",
+          "date": "2026-05-04",
           "views": 0,
           "url": "https://www.youtube.com/watch?v=xbq8AYlRHc4"
         }
-      ],
-      "monthly": []
-    },
-    "spotify_video": {
-      "total_plays": 0,
-      "episodes": [],
-      "note": "עדכן ידנית מ-Spotify for Creators"
+      ]
     }
   },
   "spotify": {
     "followers": 0,
     "total_episodes": 43,
-    "episodes": [
-      {
-        "id": "6O0esS904kl9z1H04m5gVS",
-        "title": "[זה לא גבורה זו הישרדות, שרה קופ |  [יוצאים בשאלה",
-        "date": "2026-05-04",
-        "duration_ms": 4591339,
-        "url": "https://open.spotify.com/episode/6O0esS904kl9z1H04m5gVS"
-      },
-      {
-        "id": "1mCk6TuE02y1VdTlRQ4cA2",
-        "title": "שני וספצו לנג - יחד בדרך משלהם [יוצאים בשאלה]",
-        "date": "2023-06-06",
-        "duration_ms": 2730237,
-        "url": "https://open.spotify.com/episode/1mCk6TuE02y1VdTlRQ4cA2"
-      },
-      {
-        "id": "7HjOT0vQC4JsAULyiolgcq",
-        "title": "נחמן מישל- לחיות את היום ולסלוח לעבר [יוצאים בשאלה]",
-        "date": "2023-05-16",
-        "duration_ms": 3038045,
-        "url": "https://open.spotify.com/episode/7HjOT0vQC4JsAULyiolgcq"
-      },
-      {
-        "id": "5paTc1T85AHaqQXXwT6yXI",
-        "title": "נוי בן חיים - לבחור בלב  [יוצאים בשאלה]",
-        "date": "2023-05-01",
-        "duration_ms": 2077498,
-        "url": "https://open.spotify.com/episode/5paTc1T85AHaqQXXwT6yXI"
-      },
-      {
-        "id": "2zxK5zY0XjbALeLxwJuY74",
-        "title": "מירו ואיריס- חיבור בין דורי מרגש [יוצאים בשאלה]",
-        "date": "2023-04-16",
-        "duration_ms": 2564730,
-        "url": "https://open.spotify.com/episode/2zxK5zY0XjbALeLxwJuY74"
-      },
-      {
-        "id": "7BkENUfsQ8WDRjf7OawuYc",
-        "title": "חן רוטנברג - מטראומה לנצחון [יוצאים בשאלה]",
-        "date": "2023-04-03",
-        "duration_ms": 2610131,
-        "url": "https://open.spotify.com/episode/7BkENUfsQ8WDRjf7OawuYc"
-      },
-      {
-        "id": "7rGCfP1CsSrgt4FqMMYDoB",
-        "title": "בן רוזנברג - מקנאות דתית למחוייבות אישית [יוצאים בשאלה]",
-        "date": "2023-03-19",
-        "duration_ms": 2528701,
-        "url": "https://open.spotify.com/episode/7rGCfP1CsSrgt4FqMMYDoB"
-      },
-      {
-        "id": "2PeyGyHLZYb6qQy15IAirr",
-        "title": "אתי אליהו- הבית של הלל [יוצאים בשאלה]",
-        "date": "2023-01-03",
-        "duration_ms": 1667207,
-        "url": "https://open.spotify.com/episode/2PeyGyHLZYb6qQy15IAirr"
-      },
-      {
-        "id": "6obHammtkUAmcQjbuHTMrT",
-        "title": "מנחם אסטריק - מהישיבה לרפואה [יוצאים בשאלה]",
-        "date": "2022-10-24",
-        "duration_ms": 1906892,
-        "url": "https://open.spotify.com/episode/6obHammtkUAmcQjbuHTMrT"
-      },
-      {
-        "id": "3ce3TNL3ZUr5jBZuC58Nci",
-        "title": "קובי קרמר - לוותר זה לא אופציה [יוצאים בשאלה]",
-        "date": "2022-10-03",
-        "duration_ms": 1789848,
-        "url": "https://open.spotify.com/episode/3ce3TNL3ZUr5jBZuC58Nci"
-      },
-      {
-        "id": "1RwIbZPM8RGvr07V2SFy89",
-        "title": "שמעון אברהם - הקול שבפנים [יוצאים בשאלה]",
-        "date": "2022-09-19",
-        "duration_ms": 2851992,
-        "url": "https://open.spotify.com/episode/1RwIbZPM8RGvr07V2SFy89"
-      },
-      {
-        "id": "5jtahvyJITt180xo6aTcDv",
-        "title": "רוויה קיסר - מנצחת את הפחד [יוצאים בשאלה]",
-        "date": "2022-09-05",
-        "duration_ms": 1900746,
-        "url": "https://open.spotify.com/episode/5jtahvyJITt180xo6aTcDv"
-      },
-      {
-        "id": "0AzKkFkGHysJwsI33ohi89",
-        "title": "אבי קאפ - סקרנות סובבת עולם [יוצאים בשאלה]",
-        "date": "2022-08-22",
-        "duration_ms": 1867338,
-        "url": "https://open.spotify.com/episode/0AzKkFkGHysJwsI33ohi89"
-      },
-      {
-        "id": "48tuTEtkODO8lUmM8dQYtK",
-        "title": "היידי מוזס סוללת דרך משלה [יוצאים בשאלה]",
-        "date": "2022-08-08",
-        "duration_ms": 2692520,
-        "url": "https://open.spotify.com/episode/48tuTEtkODO8lUmM8dQYtK"
-      },
-      {
-        "id": "1izBcMBQKHkXNqplbpUnPG",
-        "title": "להוולד מחדש בבום - בינה ברויט [יוצאים בשאלה]",
-        "date": "2022-07-18",
-        "duration_ms": 2407550,
-        "url": "https://open.spotify.com/episode/1izBcMBQKHkXNqplbpUnPG"
-      },
-      {
-        "id": "6Bo7OSdS7z0PZ0rwnJLnag",
-        "title": "לצאת בשאלה בשפת הסימנים - יוכבד אוחיון [יוצאים בשאלה]",
-        "date": "2022-07-04",
-        "duration_ms": 2295014,
-        "url": "https://open.spotify.com/episode/6Bo7OSdS7z0PZ0rwnJLnag"
-      },
-      {
-        "id": "2UQVn9YBtiBGLeYXai7yIz",
-        "title": "חיה הראל - מסע חוצה יבשות אל עבר העצמאות [יוצאים בשאלה]",
-        "date": "2022-06-20",
-        "duration_ms": 2429545,
-        "url": "https://open.spotify.com/episode/2UQVn9YBtiBGLeYXai7yIz"
-      },
-      {
-        "id": "5fnBhC7ZqZOAtto2EHWeTG",
-        "title": "העילוי שחלם להיות רב - נתי כהנא [יוצאים בשאלה]",
-        "date": "2022-06-06",
-        "duration_ms": 1867860,
-        "url": "https://open.spotify.com/episode/5fnBhC7ZqZOAtto2EHWeTG"
-      },
-      {
-        "id": "7u7VbarfepdoYLE8zBfvDZ",
-        "title": "ריקה קורן שוברת את כל ההגדרות [יוצאים בשאלה]",
-        "date": "2022-05-23",
-        "duration_ms": 2611410,
-        "url": "https://open.spotify.com/episode/7u7VbarfepdoYLE8zBfvDZ"
-      },
-      {
-        "id": "1o2PC2NrFI2dxgnk4Kf5of",
-        "title": "ללמוד להרגיש מחדש - אמיר שטיין [יוצאים בשאלה]",
-        "date": "2022-05-09",
-        "duration_ms": 2375811,
-        "url": "https://open.spotify.com/episode/1o2PC2NrFI2dxgnk4Kf5of"
-      },
-      {
-        "id": "34b8VK4pjvxcuJAHxxxJIv",
-        "title": "דור קליין - טורף את העולם [יוצאים בשאלה]",
-        "date": "2022-04-25",
-        "duration_ms": 3122548,
-        "url": "https://open.spotify.com/episode/34b8VK4pjvxcuJAHxxxJIv"
-      },
-      {
-        "id": "2hMtvRnay07tALmw0XtOdN",
-        "title": "אני והאקס, אלוהים - אושר סניור [יוצאים בשאלה]",
-        "date": "2022-04-11",
-        "duration_ms": 2759028,
-        "url": "https://open.spotify.com/episode/2hMtvRnay07tALmw0XtOdN"
-      },
-      {
-        "id": "49mV8VMs9I9nQfxRtVWHWh",
-        "title": "האמת הכואבת על החינוך האלים במאה שערים [יוצאים בשאלה]",
-        "date": "2022-03-28",
-        "duration_ms": 2627057,
-        "url": "https://open.spotify.com/episode/49mV8VMs9I9nQfxRtVWHWh"
-      },
-      {
-        "id": "7HHQmTiRciZ6PnLYLHycQX",
-        "title": "דודי שץ – לצאת עם סנדלי שורש [יוצאים בשאלה]",
-        "date": "2022-03-15",
-        "duration_ms": 2439080,
-        "url": "https://open.spotify.com/episode/7HHQmTiRciZ6PnLYLHycQX"
-      },
-      {
-        "id": "5UMZoJkbU6KY8qcDqpdUu5",
-        "title": "איך מגדלים לבד שני ילדים? [יוצאים בשאלה]",
-        "date": "2022-03-01",
-        "duration_ms": 2118348,
-        "url": "https://open.spotify.com/episode/5UMZoJkbU6KY8qcDqpdUu5"
-      },
-      {
-        "id": "0vOKKGjcly3qIGXjjUzZg7",
-        "title": "שחור לבן וגיל בניסטי [יוצאים בשאלה]",
-        "date": "2022-02-14",
-        "duration_ms": 2565721,
-        "url": "https://open.spotify.com/episode/0vOKKGjcly3qIGXjjUzZg7"
-      },
-      {
-        "id": "4iDwIJEsCawHjiNwX02PLJ",
-        "title": "מאיר שטייגמן – האיש הצנוע מאחורי הסטארט אפ [יוצאים בשאלה]",
-        "date": "2022-02-01",
-        "duration_ms": 2421578,
-        "url": "https://open.spotify.com/episode/4iDwIJEsCawHjiNwX02PLJ"
-      },
-      {
-        "id": "1MXKaRS1T7u0WLxsDDwaEl",
-        "title": "מבני ברק לקדמת הבימה - שיר פופוביץ' [יוצאים בשאלה]",
-        "date": "2022-01-17",
-        "duration_ms": 2714228,
-        "url": "https://open.spotify.com/episode/1MXKaRS1T7u0WLxsDDwaEl"
-      },
-      {
-        "id": "1uj5yrLmUMRu8YI8FnLQx3",
-        "title": "מהפלג הירושלמי לאושיית טיקטוק - ריקי רוטר [יוצאים בשאלה]",
-        "date": "2022-01-03",
-        "duration_ms": 2784706,
-        "url": "https://open.spotify.com/episode/1uj5yrLmUMRu8YI8FnLQx3"
-      },
-      {
-        "id": "2rLAUJVaXQh1nhPgQcrohH",
-        "title": "ימים נוראים - שנים נפלאות [יוצאים בשאלה]",
-        "date": "2021-08-16",
-        "duration_ms": 3328628,
-        "url": "https://open.spotify.com/episode/2rLAUJVaXQh1nhPgQcrohH"
-      },
-      {
-        "id": "5OdOsiw94snNyvY6L44Ocy",
-        "title": "\"כל העולם כולו, גשר צר מאוד\" - תרומת היוצאים בשאלה לחברה [יוצאים בשאלה]",
-        "date": "2021-08-01",
-        "duration_ms": 2347285,
-        "url": "https://open.spotify.com/episode/5OdOsiw94snNyvY6L44Ocy"
-      },
-      {
-        "id": "5WMtOhlev1G5WeBx4yogWV",
-        "title": "\"מֵצִיץ מִן הַחֲרַכִּים\" - מיניות גברים יוצאים בשאלה [יוצאים בשאלה]",
-        "date": "2021-07-19",
-        "duration_ms": 2019527,
-        "url": "https://open.spotify.com/episode/5WMtOhlev1G5WeBx4yogWV"
-      },
-      {
-        "id": "75VMNCLvUy9418CgEtXst8",
-        "title": "יעמדו נא שרינו - על הפוליטיקה של היציאה בשאלה [יוצאים בשאלה]",
-        "date": "2021-07-05",
-        "duration_ms": 2485264,
-        "url": "https://open.spotify.com/episode/75VMNCLvUy9418CgEtXst8"
-      },
-      {
-        "id": "0mMHyhX7HiRbC9QCyVrI8S",
-        "title": "\"בְּבָנֵינוּ וּבִבְנוֹתֵנוּ\" - הורים וילדים יוצאים בשאלה [יוצאים בשאלה]",
-        "date": "2021-06-20",
-        "duration_ms": 3316977,
-        "url": "https://open.spotify.com/episode/0mMHyhX7HiRbC9QCyVrI8S"
-      },
-      {
-        "id": "2OqN7fYyBsmdWBGJs1MGef",
-        "title": "[יוצאים בשאלה] \"עזוב תעזוב עימו\" - הבית של הלל",
-        "date": "2021-06-06",
-        "duration_ms": 2027965,
-        "url": "https://open.spotify.com/episode/2OqN7fYyBsmdWBGJs1MGef"
-      },
-      {
-        "id": "1uo4FCysvCxrvhmCNc4LFe",
-        "title": "[יוצאים בשאלה] ״לרעך כמוך״ - הרב שמבקש לחבק גם יוצאים בשאלה",
-        "date": "2021-04-18",
-        "duration_ms": 2154181,
-        "url": "https://open.spotify.com/episode/1uo4FCysvCxrvhmCNc4LFe"
-      },
-      {
-        "id": "3JnBnzZsAdtyp68RpPKL64",
-        "title": "[יוצאים בשאלה] \"כל יוצא צבא\" - על חיילים יוצאים בשאלה",
-        "date": "2021-04-05",
-        "duration_ms": 1933643,
-        "url": "https://open.spotify.com/episode/3JnBnzZsAdtyp68RpPKL64"
-      },
-      {
-        "id": "1cvzzX693uXApYnDRjM083",
-        "title": "[יוצאים בשאלה] \"תועבה עשו שניהם\" - על להט\"בים יוצאים בשאלה",
-        "date": "2021-03-21",
-        "duration_ms": 2552465,
-        "url": "https://open.spotify.com/episode/1cvzzX693uXApYnDRjM083"
-      },
-      {
-        "id": "1U5J163LSAuaPnNfkkmnQx",
-        "title": "[יוצאים בשאלה] \"חכמה בגויים תאמין\" - על פערי ההשכלה",
-        "date": "2021-03-07",
-        "duration_ms": 2390602,
-        "url": "https://open.spotify.com/episode/1U5J163LSAuaPnNfkkmnQx"
-      },
-      {
-        "id": "2cgiV0N8LBR2ooGLQj6zUV",
-        "title": "[יוצאים בשאלה] ״טובים השניים״ - על זוגיות ומיניות בתהליך היציאה בשאלה",
-        "date": "2021-02-21",
-        "duration_ms": 2891897,
-        "url": "https://open.spotify.com/episode/2cgiV0N8LBR2ooGLQj6zUV"
-      },
-      {
-        "id": "4ucI1iHiCvWqECbJBdDHg1",
-        "title": "[יוצאים בשאלה] \"חדשים מקרוב באו\" - על הפער התרבותי",
-        "date": "2021-02-07",
-        "duration_ms": 2676830,
-        "url": "https://open.spotify.com/episode/4ucI1iHiCvWqECbJBdDHg1"
-      },
-      {
-        "id": "4jolu7wJlGod9teTEwq8d1",
-        "title": "[יוצאים בשאלה] \"בזכות נשים צדקניות\" - על נשים יוצאות בשאלה",
-        "date": "2021-01-07",
-        "duration_ms": 2651972,
-        "url": "https://open.spotify.com/episode/4jolu7wJlGod9teTEwq8d1"
-      },
-      {
-        "id": "1ZzLiqSxpzaMKdQ7Om0JxH",
-        "title": "[יוצאים בשאלה] \"אמונה בגויים - אל תאמין\" על מסע רוחני של יוצאים בשאלה",
-        "date": "2021-01-07",
-        "duration_ms": 2285741,
-        "url": "https://open.spotify.com/episode/1ZzLiqSxpzaMKdQ7Om0JxH"
-      }
-    ]
+    "episodes": []
   }
 }
