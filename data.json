@@ -1,0 +1,28 @@
+{
+  "updated": "2026-05-06",
+  "show": {
+    "name": "יוצאים בשאלה",
+    "spreaker_show_id": "4956945",
+    "youtube_channel": "https://www.youtube.com/@mediahillel"
+  },
+  "audio": {
+    "total_plays": 0,
+    "episode_count": 0,
+    "episodes": [],
+    "monthly": []
+  },
+  "video": {
+    "youtube": {
+      "channel_url": "https://www.youtube.com/@mediahillel",
+      "total_views": 0,
+      "video_count": 0,
+      "videos": [],
+      "monthly": []
+    },
+    "spotify_video": {
+      "total_plays": 0,
+      "episodes": [],
+      "note": "עדכן ידנית מ-Spotify for Creators"
+    }
+  }
+}
