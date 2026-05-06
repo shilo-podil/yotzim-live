@@ -254,6 +254,10 @@
 <script>
 const PASSWORD = 'iritirit';
 
+function togglePw() {
+  const inp = document.getElementById('pw-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
 function checkPassword() {
   if (document.getElementById('pw-input').value === PASSWORD) {
     document.getElementById('pw-overlay').style.display = 'none';
