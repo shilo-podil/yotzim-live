@@ -344,7 +344,7 @@ function render(d) {
 
   html += `<div class="cards">
     ${card('סה"כ צפיות', fmtK(yt.total_views||0), `${fmt(yt.video_count||0)} פרקים פורסמו`, 'red', '👁️')}
-    ${card('פרק ראשון', ytVideos.length ? fmtK(ytVideos[0].views)+' צפיות' : '—', ytVideos.length ? fmtDate(ytVideos[0].date) : 'טרם פורסם', 'purple', '🎬')}
+    ${card('פרק ראשון', ytVideos.length ? fmtDate(ytVideos[0].date)||'ראה בYouTube' : '—', ytVideos.length ? ytVideos[0].title?.substring(0,30)||ytVideos[0].id : 'טרם פורסם', 'purple', '🎬')}
   </div>`;
 
   if (ytVideos.length > 0) {
@@ -354,11 +354,11 @@ function render(d) {
         <img class="ep-thumb" src="${thumb}" alt="${ep.title}" onerror="this.style.display='none'">
         <div class="ep-body">
           <span class="ep-badge">פרק וידאו</span>
-          <div class="ep-title"><a href="${ep.url}" target="_blank" rel="noopener">${ep.title}</a></div>
+          <div class="ep-title"><a href="${ep.url}" target="_blank" rel="noopener">${ep.title || ep.url}</a></div>
           <div class="ep-date">📅 ${fmtDate(ep.date)}</div>
           <div class="ep-stats">
             <div class="ep-stat">
-              <div class="es-val">${fmt(ep.views)}</div>
+              <div class="es-val">${ep.views > 0 ? fmt(ep.views) : "—"}</div>
               <div class="es-lbl">צפיות יוטיוב</div>
             </div>
           </div>

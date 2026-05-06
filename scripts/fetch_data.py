@@ -130,61 +130,58 @@ def compute_monthly(items, key='plays'):
 # Known podcast episode IDs — always included regardless of channel scan
 KNOWN_EPISODE_IDS = ['xbq8AYlRHc4']
 
-def fetch_video_meta(video_id):
-    """Fetch full metadata for a single video to get accurate view count."""
-    try:
-        r = subprocess.run(
-            ['yt-dlp', '--dump-json', '--quiet', '--no-playlist',
-             f'https://www.youtube.com/watch?v={video_id}'],
-            capture_output=True, text=True, timeout=60)
-        if r.returncode == 0 and r.stdout.strip():
-            return json.loads(r.stdout.strip())
-    except Exception:
-        pass
-    return {}
-
 def fetch_youtube_channel():
-    """Step 1: flat-playlist to discover podcast episode IDs.
-       Step 2: full metadata fetch per episode for accurate view counts."""
+    """Flat-playlist scan of channel to discover podcast episodes.
+    Always includes KNOWN_EPISODE_IDS as a seed.
+    View counts come from yt-dlp flat metadata where available."""
     channel_url = f'https://www.youtube.com/{YOUTUBE_CHANNEL}'
     try:
         result = subprocess.run(
             ['yt-dlp', '--flat-playlist', '--dump-json', '--quiet', channel_url],
             capture_output=True, text=True, timeout=180)
 
-        discovered_ids = set(KNOWN_EPISODE_IDS)
+        # Start with known IDs so they are always present
+        seen_ids  = set(KNOWN_EPISODE_IDS)
+        episodes  = {}  # id -> partial metadata from flat-playlist
+
         for line in result.stdout.strip().split('\n'):
             line = line.strip()
             if not line:
                 continue
             try:
                 v = json.loads(line)
-                title = v.get('title') or ''
+                title    = v.get('title') or ''
                 vid_type = v.get('_type', '')
                 vid_id   = v.get('id', '')
-                # Episode: must mention the show AND "פודקאסט" (podcast tag in title)
+                # Podcast episodes must mention both the show name and the word פודקאסט
                 if (PODCAST_FILTER in title and 'פודקאסט' in title
                         and vid_id and vid_type != 'playlist'):
-                    discovered_ids.add(vid_id)
+                    seen_ids.add(vid_id)
+                    ud = str(v.get('upload_date', '') or '')
+                    date_str = f'{ud[:4]}-{ud[4:6]}-{ud[6:8]}' if len(ud) == 8 else ''
+                    episodes[vid_id] = {
+                        'id':    vid_id,
+                        'title': title,
+                        'date':  date_str,
+                        'views': int(v.get('view_count') or 0),
+                        'url':   f'https://www.youtube.com/watch?v={vid_id}',
+                    }
             except Exception:
                 continue
 
-        print(f'   Found {len(discovered_ids)} episode IDs — fetching metadata…')
-        videos = []
-        for vid_id in discovered_ids:
-            meta = fetch_video_meta(vid_id)
-            if not meta:
-                continue
-            ud = str(meta.get('upload_date', '') or '')
-            date_str = f'{ud[:4]}-{ud[4:6]}-{ud[6:8]}' if len(ud) == 8 else ''
-            videos.append({
-                'id':    vid_id,
-                'title': meta.get('title', ''),
-                'date':  date_str,
-                'views': int(meta.get('view_count') or 0),
-                'url':   f'https://www.youtube.com/watch?v={vid_id}',
-            })
+        # Add any known IDs that were not found in the channel scan
+        for vid_id in KNOWN_EPISODE_IDS:
+            if vid_id not in episodes:
+                episodes[vid_id] = {
+                    'id':    vid_id,
+                    'title': '',   # title will be populated once yt-dlp can reach it
+                    'date':  '',
+                    'views': 0,
+                    'url':   f'https://www.youtube.com/watch?v={vid_id}',
+                }
 
+        print(f'   Found {len(episodes)} podcast episode(s)')
+        videos = list(episodes.values())
         total_views = sum(v['views'] for v in videos)
         videos_sorted = sorted(videos, key=lambda x: x['date'], reverse=True)
         return {
@@ -196,8 +193,13 @@ def fetch_youtube_channel():
         }
     except Exception as e:
         print(f'YouTube error: {e}', file=sys.stderr)
-        return {'channel_url': channel_url, 'total_views': 0, 'video_count': 0,
-                'videos': [], 'monthly': [], 'error': str(e)}
+        # Fall back to known IDs with empty metadata
+        fallback = [{'id': vid_id, 'title': '', 'date': '', 'views': 0,
+                     'url': f'https://www.youtube.com/watch?v={vid_id}'}
+                    for vid_id in KNOWN_EPISODE_IDS]
+        return {'channel_url': channel_url, 'total_views': 0,
+                'video_count': len(fallback), 'videos': fallback,
+                'monthly': [], 'error': str(e)}
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
