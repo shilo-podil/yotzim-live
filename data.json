@@ -411,8 +411,16 @@
     "youtube": {
       "channel_url": "https://www.youtube.com/@hillel-il",
       "total_views": 0,
-      "video_count": 0,
-      "videos": [],
+      "video_count": 1,
+      "videos": [
+        {
+          "id": "xbq8AYlRHc4",
+          "title": "זה לא גבורה זו הישרדות, שרה קופ | פודקאסט הלל יוצאים בשאלה",
+          "date": "",
+          "views": 0,
+          "url": "https://www.youtube.com/watch?v=xbq8AYlRHc4"
+        }
+      ],
       "monthly": []
     },
     "spotify_video": {
